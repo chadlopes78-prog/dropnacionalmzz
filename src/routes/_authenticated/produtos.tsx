@@ -221,16 +221,21 @@ function ProductsPage() {
                       formatMT(p.price)
                     )}
                   </span>
-                  <span className="text-muted-foreground">Custo</span>
-                  <span className="text-right">{formatMT(p.product_cost)}</span>
-                  <span className="text-muted-foreground">Entrega</span>
-                  <span className="text-right">{formatMT(p.delivery_cost)}</span>
-                  <span className="text-muted-foreground">Margem</span>
-                  <span
-                    className={`text-right font-semibold ${margin(p) >= 0 ? "text-status-ok" : "text-status-danger"}`}
-                  >
-                    {formatMT(margin(p))}
-                  </span>
+                  {showCosts ? (
+                    <>
+                      <span className="text-muted-foreground">Custo</span>
+                      <span className="text-right">{formatMT(p.product_cost)}</span>
+                      <span className="text-muted-foreground">Entrega</span>
+                      <span className="text-right">{formatMT(p.delivery_cost)}</span>
+                      <span className="text-muted-foreground">Margem</span>
+                      <span
+                        className={`text-right font-semibold ${margin(p) >= 0 ? "text-status-ok" : "text-status-danger"}`}
+                      >
+                        {formatMT(margin(p))}
+                      </span>
+                    </>
+                  ) : null}
+
                   <span className="text-muted-foreground">Stock</span>
                   <span className="text-right">{p.stock}</span>
                 </div>
