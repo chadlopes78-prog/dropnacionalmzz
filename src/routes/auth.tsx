@@ -87,6 +87,17 @@ function AuthPage() {
           </span>
           <span className="text-lg font-semibold text-foreground">Drop Nacional</span>
         </div>
+
+        {acesso === "pendente" ? (
+          <div
+            role="alert"
+            className="mb-4 rounded-lg border border-status-warn/40 bg-status-warn/10 p-3 text-sm text-foreground"
+          >
+            A sua conta existe, mas ainda não tem função atribuída na equipa. Peça a um
+            administrador para lhe dar acesso na página <strong>Equipa</strong>.
+          </div>
+        ) : null}
+
         <Card>
           <CardHeader>
             <CardTitle>Área da equipa</CardTitle>
