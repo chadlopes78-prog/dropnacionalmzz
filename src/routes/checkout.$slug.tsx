@@ -126,35 +126,38 @@ function CheckoutPage() {
       return;
     }
     setSubmitting(true);
-    const { data, error } = await supabase
-      .from("orders")
-      .insert({
-        product_id: product.id,
-        product_name: product.name,
-        unit_price: unitPrice,
-        quantity,
-        delivery_cost: deliveryCost,
-        total,
-        customer_name: form.customer_name.trim(),
-        phone: digitsOnly(form.phone).replace(/^258/, ""),
-        province: form.province,
-        city: form.city.trim(),
-        neighborhood: form.neighborhood.trim(),
-        reference_point: form.reference_point.trim() || null,
-        contact_period: form.contact_period || null,
-        contact_slot: form.contact_slot || null,
-        status: "nova",
-      })
-      .select("id")
-      .single();
+
+    // O identificador é gerado no cliente para podermos abrir o recibo sem
+    // precisar de ler a tabela `orders` (o público não tem leitura directa).
+    const orderId = crypto.randomUUID();
+
+    // Preço, custo de entrega e total NÃO são enviados: são recalculados na
+    // base de dados a partir do produto real, para impedir manipulação.
+    const { error } = await supabase.from("orders").insert({
+      id: orderId,
+      product_id: product.id,
+      product_name: product.name,
+      quantity,
+      customer_name: form.customer_name.trim(),
+      phone: digitsOnly(form.phone).replace(/^258/, ""),
+      province: form.province,
+      city: form.city.trim(),
+      neighborhood: form.neighborhood.trim(),
+      reference_point: form.reference_point.trim() || null,
+      contact_period: form.contact_period || null,
+      contact_slot: form.contact_slot || null,
+      status: "nova",
+    });
     setSubmitting(false);
 
-    if (error || !data) {
+    if (error) {
       toast.error("Não foi possível registar a encomenda. Tente novamente.");
       return;
     }
-    void navigate({ to: "/encomenda/$id", params: { id: data.id } });
+    void navigate({ to: "/encomenda/$id", params: { id: orderId } });
   }
+
+
 
   if (isLoading) {
     return (
