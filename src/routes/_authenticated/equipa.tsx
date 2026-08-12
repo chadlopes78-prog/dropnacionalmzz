@@ -109,6 +109,8 @@ function TeamPage() {
 
   return (
     <AppShell title="Equipa" description={`${members.length} membros registados`}>
+      <AccessControlCard />
+
       <Card className="mb-5">
         <CardContent className="flex flex-col gap-3 sm:flex-row sm:items-end">
           <div className="flex-1 space-y-1.5">
