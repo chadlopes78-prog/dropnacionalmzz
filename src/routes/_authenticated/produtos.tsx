@@ -101,6 +101,10 @@ function ProductsPage() {
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
 
   const list = useMemo(() => products ?? [], [products]);
+  const { data: myRoles } = useMyRoles();
+  // Custos e margens só são mostrados a administradores e gestores.
+  const showCosts = canSeeCosts(myRoles);
+
 
   const save = useMutation({
     mutationFn: async () => {
