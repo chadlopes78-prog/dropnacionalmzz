@@ -10,6 +10,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export const Route = createFileRoute("/auth")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    acesso: search["acesso"] === "pendente" ? ("pendente" as const) : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Entrar na Dashboard | Drop Nacional Moçambique" },
@@ -31,16 +34,19 @@ export const Route = createFileRoute("/auth")({
 
 function AuthPage() {
   const navigate = useNavigate();
+  const { acesso } = Route.useSearch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // Se já existir sessão activa, segue directamente para a dashboard.
+    // Se já existir sessão activa e acesso atribuído, segue para a dashboard.
+    if (acesso === "pendente") return;
     void supabase.auth.getSession().then(({ data }) => {
       if (data.session) void navigate({ to: "/dashboard" });
     });
-  }, [navigate]);
+  }, [navigate, acesso]);
+
 
   async function handleSignIn(e: React.FormEvent) {
     e.preventDefault();
