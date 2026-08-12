@@ -196,3 +196,124 @@ function TeamPage() {
     </AppShell>
   );
 }
+
+/**
+ * Gestão de acessos reais (tabela `user_roles`).
+ *
+ * Sem função atribuída, uma conta autenticada não consegue ler nem escrever
+ * dados de encomendas — a regra é aplicada pelas policies da base de dados.
+ * Este cartão só é útil (e só devolve dados) para administradores.
+ */
+function AccessControlCard() {
+  const qc = useQueryClient();
+  const { data: myRoles } = useMyRoles();
+  const { data: grants, isLoading } = useAllRoles();
+  const [userId, setUserId] = useState("");
+  const [grantRole, setGrantRole] = useState<AppRole>("operador");
+
+  const isAdmin = !!myRoles?.includes("administrador");
+
+  const grant = useMutation({
+    mutationFn: async () => {
+      const uuid = userId.trim();
+      if (!/^[0-9a-f-]{36}$/i.test(uuid)) throw new Error("Identificador de utilizador inválido.");
+      const { error } = await supabase
+        .from("user_roles")
+        .insert({ user_id: uuid, role: grantRole });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast.success("Acesso atribuído.");
+      setUserId("");
+      void qc.invalidateQueries({ queryKey: ["user_roles"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const revoke = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("user_roles").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast.success("Acesso removido.");
+      void qc.invalidateQueries({ queryKey: ["user_roles"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  if (!isAdmin) return null;
+
+  return (
+    <Card className="mb-5">
+      <CardContent className="space-y-4">
+        <div>
+          <h2 className="font-semibold text-foreground">Acessos à dashboard</h2>
+          <p className="text-sm text-muted-foreground">
+            Só contas com função atribuída conseguem ver encomendas e clientes. Criar conta não dá
+            acesso.
+          </p>
+        </div>
+
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
+          <div className="flex-1 space-y-1.5">
+            <Label className="text-xs">Identificador da conta (UUID do utilizador)</Label>
+            <Input
+              value={userId}
+              onChange={(e) => setUserId(e.target.value)}
+              placeholder="00000000-0000-0000-0000-000000000000"
+            />
+          </div>
+          <div className="w-full space-y-1.5 sm:w-56">
+            <Label className="text-xs">Função de acesso</Label>
+            <Select value={grantRole} onValueChange={(v) => setGrantRole(v as AppRole)}>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {TEAM_ROLES.map((r) => (
+                  <SelectItem key={r.value} value={r.value}>
+                    {r.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <Button onClick={() => grant.mutate()} disabled={grant.isPending}>
+            <Plus className="size-4" /> Dar acesso
+          </Button>
+        </div>
+
+        {isLoading ? (
+          <Skeleton className="h-16 w-full rounded-lg" />
+        ) : (
+          <div className="space-y-2">
+            {(grants ?? []).map((g) => (
+              <div
+                key={g.id}
+                className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-border p-3"
+              >
+                <div className="min-w-0">
+                  <p className="truncate font-mono text-xs text-foreground">{g.user_id}</p>
+                  <Badge variant="secondary" className="mt-1">
+                    {TEAM_ROLES.find((r) => r.value === g.role)?.label ?? g.role}
+                  </Badge>
+                </div>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  className="text-status-danger"
+                  onClick={() => revoke.mutate(g.id)}
+                >
+                  <Trash2 className="size-4" /> Remover acesso
+                </Button>
+              </div>
+            ))}
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
+}
