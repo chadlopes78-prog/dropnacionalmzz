@@ -10,9 +10,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export const Route = createFileRoute("/auth")({
-  validateSearch: (search: Record<string, unknown>) => ({
-    acesso: search["acesso"] === "pendente" ? ("pendente" as const) : undefined,
-  }),
+  validateSearch: (
+    search: Record<string, unknown>,
+  ): { acesso?: "pendente" } =>
+    search["acesso"] === "pendente" ? { acesso: "pendente" } : {},
+
   head: () => ({
     meta: [
       { title: "Entrar na Dashboard | Drop Nacional Moçambique" },
