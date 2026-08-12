@@ -22,6 +22,8 @@ import {
 } from "@/components/ui/dialog";
 import { supabase } from "@/integrations/supabase/client";
 import { useProducts, type Product } from "@/hooks/useOrders";
+import { canSeeCosts, useMyRoles } from "@/hooks/useRoles";
+
 import { PROVINCES, formatMT, slugify } from "@/lib/domain";
 
 export const Route = createFileRoute("/_authenticated/produtos")({
