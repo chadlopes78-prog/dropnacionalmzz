@@ -16,10 +16,10 @@ export const Route = createFileRoute("/")({
         content:
           "Encomende produtos originais em Moçambique e pague somente quando receber. Entrega em todas as províncias com confirmação por telefone.",
       },
-      { property: "og:title", content: "Drop Nacional Moçambique | Pagamento na entrega" },
+      { property: "og:title", content: "Drop Nacional Moçambique | Encomende e pague na entrega" },
       {
         property: "og:description",
-        content: "Faça a sua encomenda online e pague apenas quando o produto chegar a si.",
+        content: "Encomende produtos originais em Moçambique e pague somente quando receber. Entrega em todas as províncias com confirmação por telefone.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

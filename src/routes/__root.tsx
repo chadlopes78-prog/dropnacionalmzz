@@ -77,14 +77,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
+      { title: "Drop Nacional Moçambique | Encomende e pague na entrega" },
+      { name: "description", content: "Encomende produtos originais em Moçambique e pague somente quando receber. Entrega em todas as províncias com confirmação por telefone." },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { property: "og:title", content: "Drop Nacional Moçambique | Encomende e pague na entrega" },
+      { property: "og:description", content: "Encomende produtos originais em Moçambique e pague somente quando receber. Entrega em todas as províncias com confirmação por telefone." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "Drop Nacional Moçambique | Encomende e pague na entrega" },
+      { name: "twitter:description", content: "Encomende produtos originais em Moçambique e pague somente quando receber. Entrega em todas as províncias com confirmação por telefone." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/fa9bac94f1fa0f3125547134354b472b/id-preview-847f62a1--44ea44cb-1197-4893-95c4-7f7831786fff.lovable.app-1786563830455.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/fa9bac94f1fa0f3125547134354b472b/id-preview-847f62a1--44ea44cb-1197-4893-95c4-7f7831786fff.lovable.app-1786563830455.png" },
     ],
     links: [
       {
