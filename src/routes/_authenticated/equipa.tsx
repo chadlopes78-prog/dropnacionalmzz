@@ -20,7 +20,9 @@ import {
 } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { useOrders, useTeam } from "@/hooks/useOrders";
+import { useAllRoles, useMyRoles, type AppRole } from "@/hooks/useRoles";
 import { TEAM_ROLES, formatMT } from "@/lib/domain";
+
 
 export const Route = createFileRoute("/_authenticated/equipa")({
   head: () => ({
