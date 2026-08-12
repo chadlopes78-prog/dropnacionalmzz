@@ -83,7 +83,8 @@ function CheckoutPage() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("products")
-        .select("*")
+        // A loja pública não tem acesso a custos internos; pedimos só colunas comerciais.
+        .select("id, slug, name, image_url, gallery, short_description, price, promo_price, stock, delivery_cost, provinces, cities, delivery_time, active, created_at")
         .eq("slug", slug)
         .eq("active", true)
         .maybeSingle();
