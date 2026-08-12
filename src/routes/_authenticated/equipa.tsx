@@ -315,5 +315,3 @@ function AccessControlCard() {
     </Card>
   );
 }
-
-}
