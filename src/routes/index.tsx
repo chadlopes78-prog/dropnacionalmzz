@@ -244,4 +244,3 @@ function StoreHome() {
     </div>
   );
 }
-}
