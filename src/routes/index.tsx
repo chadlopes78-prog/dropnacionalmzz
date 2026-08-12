@@ -34,7 +34,8 @@ function StoreHome() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("products")
-        .select("*")
+        // A loja pública não tem acesso a custos internos; pedimos só colunas comerciais.
+        .select("id, slug, name, image_url, gallery, short_description, price, promo_price, stock, delivery_cost, provinces, cities, delivery_time, active, created_at")
         .eq("active", true)
         .order("created_at", { ascending: false });
       if (error) throw error;
