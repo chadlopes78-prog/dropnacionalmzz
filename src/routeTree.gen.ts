@@ -12,7 +12,9 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedContactosRouteImport } from './routes/_authenticated/contactos'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedPorLigarRouteImport } from './routes/_authenticated/por-ligar'
 import { Route as CheckoutSlugRouteImport } from './routes/checkout.$slug'
 import { Route as EncomendaIdRouteImport } from './routes/encomenda.$id'
 
@@ -30,9 +32,19 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedContactosRoute = AuthenticatedContactosRouteImport.update({
+  id: '/contactos',
+  path: '/contactos',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedPorLigarRoute = AuthenticatedPorLigarRouteImport.update({
+  id: '/por-ligar',
+  path: '/por-ligar',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const CheckoutSlugRoute = CheckoutSlugRouteImport.update({
@@ -49,14 +61,18 @@ const EncomendaIdRoute = EncomendaIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/contactos': typeof AuthenticatedContactosRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/por-ligar': typeof AuthenticatedPorLigarRoute
   '/checkout/$slug': typeof CheckoutSlugRoute
   '/encomenda/$id': typeof EncomendaIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/contactos': typeof AuthenticatedContactosRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/por-ligar': typeof AuthenticatedPorLigarRoute
   '/checkout/$slug': typeof CheckoutSlugRoute
   '/encomenda/$id': typeof EncomendaIdRoute
 }
@@ -65,21 +81,39 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/_authenticated/contactos': typeof AuthenticatedContactosRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/por-ligar': typeof AuthenticatedPorLigarRoute
   '/checkout/$slug': typeof CheckoutSlugRoute
   '/encomenda/$id': typeof EncomendaIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/dashboard' | '/checkout/$slug' | '/encomenda/$id'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/contactos'
+    | '/dashboard'
+    | '/por-ligar'
+    | '/checkout/$slug'
+    | '/encomenda/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/dashboard' | '/checkout/$slug' | '/encomenda/$id'
+  to:
+    | '/'
+    | '/auth'
+    | '/contactos'
+    | '/dashboard'
+    | '/por-ligar'
+    | '/checkout/$slug'
+    | '/encomenda/$id'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/_authenticated/contactos'
     | '/_authenticated/dashboard'
+    | '/_authenticated/por-ligar'
     | '/checkout/$slug'
     | '/encomenda/$id'
   fileRoutesById: FileRoutesById
@@ -115,11 +149,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/contactos': {
+      id: '/_authenticated/contactos'
+      path: '/contactos'
+      fullPath: '/contactos'
+      preLoaderRoute: typeof AuthenticatedContactosRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/por-ligar': {
+      id: '/_authenticated/por-ligar'
+      path: '/por-ligar'
+      fullPath: '/por-ligar'
+      preLoaderRoute: typeof AuthenticatedPorLigarRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/checkout/$slug': {
@@ -140,11 +188,15 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedContactosRoute: typeof AuthenticatedContactosRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedPorLigarRoute: typeof AuthenticatedPorLigarRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedContactosRoute: AuthenticatedContactosRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedPorLigarRoute: AuthenticatedPorLigarRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
