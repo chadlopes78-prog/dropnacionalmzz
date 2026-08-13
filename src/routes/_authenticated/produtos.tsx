@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Copy, Pencil, Plus, Trash2 } from "lucide-react";
+import { Copy, Pencil, Plus, Trash2, ChevronUp, ChevronDown, User } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
