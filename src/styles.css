@@ -158,6 +158,13 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    min-height: 100dvh;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  }
+
+  /* Prevent automatic zoom on iOS */
+  input, select, textarea {
+    font-size: 16px !important;
   }
 }
 
