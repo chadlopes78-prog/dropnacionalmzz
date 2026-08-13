@@ -167,6 +167,7 @@ export type Database = {
           action_button_text: string | null
           active: boolean
           cities: string[]
+          continue_selling_no_stock: boolean | null
           created_at: string
           delivery_cost: number
           delivery_time: string | null
@@ -178,9 +179,14 @@ export type Database = {
           product_cost: number
           promo_price: number | null
           provinces: string[]
+          recent_activity_frequency: number | null
           short_description: string | null
+          show_recent_activity: boolean | null
+          show_stock_warning: boolean | null
           slug: string
           stock: number
+          stock_urgency_message: string | null
+          testimonials: Json | null
           timer_color: string | null
           timer_minutes: number | null
           timer_seconds: number | null
@@ -191,6 +197,7 @@ export type Database = {
           action_button_text?: string | null
           active?: boolean
           cities?: string[]
+          continue_selling_no_stock?: boolean | null
           created_at?: string
           delivery_cost?: number
           delivery_time?: string | null
@@ -202,9 +209,14 @@ export type Database = {
           product_cost?: number
           promo_price?: number | null
           provinces?: string[]
+          recent_activity_frequency?: number | null
           short_description?: string | null
+          show_recent_activity?: boolean | null
+          show_stock_warning?: boolean | null
           slug: string
           stock?: number
+          stock_urgency_message?: string | null
+          testimonials?: Json | null
           timer_color?: string | null
           timer_minutes?: number | null
           timer_seconds?: number | null
@@ -215,6 +227,7 @@ export type Database = {
           action_button_text?: string | null
           active?: boolean
           cities?: string[]
+          continue_selling_no_stock?: boolean | null
           created_at?: string
           delivery_cost?: number
           delivery_time?: string | null
@@ -226,9 +239,14 @@ export type Database = {
           product_cost?: number
           promo_price?: number | null
           provinces?: string[]
+          recent_activity_frequency?: number | null
           short_description?: string | null
+          show_recent_activity?: boolean | null
+          show_stock_warning?: boolean | null
           slug?: string
           stock?: number
+          stock_urgency_message?: string | null
+          testimonials?: Json | null
           timer_color?: string | null
           timer_minutes?: number | null
           timer_seconds?: number | null
