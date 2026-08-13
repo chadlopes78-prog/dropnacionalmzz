@@ -60,16 +60,8 @@ function ContactsPage() {
           assignees={assignees}
         />
 
-        <div className="max-w-xl space-y-1.5 rounded-xl border border-border bg-muted/20 p-4">
-          <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Mensagem padrão de WhatsApp</Label>
-          <Textarea
-            rows={2}
-            value={waTemplate}
-            onChange={(e) => setWaTemplate(e.target.value)}
-            placeholder="Use {CLIENTE} e {PRODUTO}"
-            className="bg-background"
-          />
-        </div>
+        {/* Mensagem padrão de WhatsApp removida a pedido do utilizador */}
+
 
 
         {isLoading ? (
