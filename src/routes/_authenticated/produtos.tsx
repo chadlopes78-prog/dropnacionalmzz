@@ -334,59 +334,49 @@ function ProductsPage() {
                   onChange={(e) => setForm((f) => ({ ...f, short_description: e.target.value }))}
                 />
               </Field>
+              <div className="grid grid-cols-2 gap-3">
+                <Field label="Preço (MT)">
+                  <Input
+                    inputMode="decimal"
+                    value={form.price}
+                    onChange={(e) => setForm((f) => ({ ...f, price: e.target.value }))}
+                  />
+                </Field>
+                <Field label="Preço promocional (MT)">
+                  <Input
+                    inputMode="decimal"
+                    value={form.promo_price}
+                    onChange={(e) => setForm((f) => ({ ...f, promo_price: e.target.value }))}
+                  />
+                </Field>
+              </div>
             </div>
 
             <div className="space-y-3">
               <h3 className="text-sm font-semibold text-foreground">Stock</h3>
-              <div className="grid grid-cols-2 gap-3">
-                <Field label="Quantidade">
-                  <Input
-                    inputMode="numeric"
-                    value={form.stock}
-                    onChange={(e) => setForm((f) => ({ ...f, stock: e.target.value }))}
-                  />
-                </Field>
-              </div>
-              {/* TODO: Add more stock config fields: Show stock warning, urgency message, continue selling */}
+              <Field label="Quantidade disponível">
+                <Input
+                  inputMode="numeric"
+                  value={form.stock}
+                  onChange={(e) => setForm((f) => ({ ...f, stock: e.target.value }))}
+                />
+              </Field>
             </div>
 
             <div className="space-y-3">
               <h3 className="text-sm font-semibold text-foreground">Depoimentos</h3>
-              {/* TODO: Add Testimonial manager */}
+              <p className="text-xs text-muted-foreground">Gestão de depoimentos disponível em breve.</p>
             </div>
-          </div>
-                placeholder="Maputo, Matola, Beira"
-              />
-            </Field>
 
-            <div className="space-y-2">
-              <Label className="text-xs">Províncias com entrega</Label>
-              <div className="flex flex-wrap gap-2">
-                {PROVINCES.map((prov) => {
-                  const on = form.provinces.includes(prov);
-                  return (
-                    <button
-                      key={prov}
-                      type="button"
-                      onClick={() =>
-                        setForm((f) => ({
-                          ...f,
-                          provinces: on
-                            ? f.provinces.filter((p) => p !== prov)
-                            : [...f.provinces, prov],
-                        }))
-                      }
-                      className={`rounded-full border px-3 py-1 text-xs transition ${
-                        on
-                          ? "border-primary bg-primary text-primary-foreground"
-                          : "border-border text-muted-foreground"
-                      }`}
-                    >
-                      {prov}
-                    </button>
-                  );
-                })}
-              </div>
+            <div className="space-y-3">
+              <h3 className="text-sm font-semibold text-foreground">Disponibilidade</h3>
+              <Field label="Cidades atendidas (separadas por vírgula)">
+                <Input
+                  value={form.cities}
+                  onChange={(e) => setForm((f) => ({ ...f, cities: e.target.value }))}
+                  placeholder="Maputo, Matola, Beira"
+                />
+              </Field>
             </div>
 
             <div className="flex items-center justify-between rounded-lg border border-border p-3">
