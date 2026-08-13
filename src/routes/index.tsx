@@ -70,10 +70,6 @@ function StoreHome() {
         
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <div className="mx-auto mb-6 flex w-fit items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm font-medium text-primary backdrop-blur-sm animate-in fade-in slide-in-from-bottom-3 duration-700">
-              <ShieldCheck className="size-4" />
-              <span>Compra 100% Segura • Pagamento na Entrega</span>
-            </div>
             
             <h1 className="mx-auto max-w-4xl bg-gradient-to-b from-foreground to-foreground/70 bg-clip-text text-4xl font-extrabold tracking-tight text-transparent sm:text-6xl lg:text-7xl animate-in fade-in slide-in-from-bottom-4 duration-700 delay-100">
               Os melhores produtos chegam até à sua porta
