@@ -139,7 +139,10 @@ function ProductsPage() {
           .map((c) => c.trim())
           .filter(Boolean),
         active: form.active,
+        action_button_text: form.action_button_text.trim() || "Comprar Agora",
+        action_button_color: form.action_button_color.trim() || "#0D9488",
       };
+
 
       const { error } = editing
         ? await supabase.from("products").update(payload).eq("id", editing.id)
