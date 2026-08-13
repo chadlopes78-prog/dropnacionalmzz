@@ -59,7 +59,11 @@ interface FormState {
   active: boolean;
   action_button_text: string;
   action_button_color: string;
+  timer_minutes: string;
+  timer_seconds: string;
+  timer_color: string;
 }
+
 
 
 const EMPTY_FORM: FormState = {
@@ -68,7 +72,7 @@ const EMPTY_FORM: FormState = {
   short_description: "",
   price: "",
   promo_price: "",
-  product_cost: "",
+  product_cost: "0",
   delivery_cost: "0",
   stock: "0",
   delivery_time: "24 a 72 horas",
@@ -78,7 +82,11 @@ const EMPTY_FORM: FormState = {
   active: true,
   action_button_text: "Comprar Agora",
   action_button_color: "#0D9488",
+  timer_minutes: "10",
+  timer_seconds: "0",
+  timer_color: "#ef4444",
 };
+
 
 function toForm(p: Product): FormState {
   return {
@@ -97,8 +105,12 @@ function toForm(p: Product): FormState {
     active: p.active,
     action_button_text: (p as any).action_button_text ?? "Comprar Agora",
     action_button_color: (p as any).action_button_color ?? "#0D9488",
+    timer_minutes: String((p as any).timer_minutes ?? 10),
+    timer_seconds: String((p as any).timer_seconds ?? 0),
+    timer_color: (p as any).timer_color ?? "#ef4444",
   };
 }
+
 
 
 function ProductsPage() {
@@ -141,7 +153,11 @@ function ProductsPage() {
         active: form.active,
         action_button_text: form.action_button_text.trim() || "Comprar Agora",
         action_button_color: form.action_button_color.trim() || "#0D9488",
+        timer_minutes: Number(form.timer_minutes) || 0,
+        timer_seconds: Number(form.timer_seconds) || 0,
+        timer_color: form.timer_color.trim() || "#ef4444",
       };
+
 
 
       const { error } = editing
@@ -370,6 +386,34 @@ function ProductsPage() {
                 </div>
               </Field>
             </div>
+
+            <div className="grid grid-cols-3 gap-3">
+              <Field label="Minutos do Cron.">
+                <Input
+                  inputMode="numeric"
+                  value={form.timer_minutes}
+                  onChange={(e) => setForm((f) => ({ ...f, timer_minutes: e.target.value }))}
+                />
+              </Field>
+              <Field label="Segundos do Cron.">
+                <Input
+                  inputMode="numeric"
+                  value={form.timer_seconds}
+                  onChange={(e) => setForm((f) => ({ ...f, timer_seconds: e.target.value }))}
+                />
+              </Field>
+              <Field label="Cor do Cron.">
+                <div className="flex gap-2">
+                  <Input
+                    type="color"
+                    className="h-9 w-full p-1"
+                    value={form.timer_color}
+                    onChange={(e) => setForm((f) => ({ ...f, timer_color: e.target.value }))}
+                  />
+                </div>
+              </Field>
+            </div>
+
 
             <div className="space-y-1.5">
               <Label className="text-xs">Imagem do produto</Label>

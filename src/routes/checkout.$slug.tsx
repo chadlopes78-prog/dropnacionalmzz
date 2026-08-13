@@ -1,7 +1,9 @@
 import { useMemo, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Minus, Plus, ShieldCheck, Truck, Loader2 } from "lucide-react";
+import { Minus, Plus, ShieldCheck, Truck, Loader2, Timer } from "lucide-react";
+import { useEffect } from "react";
+
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -84,7 +86,7 @@ function CheckoutPage() {
       const { data, error } = await supabase
         .from("products")
         // A loja pública não tem acesso a custos internos; pedimos só colunas comerciais.
-        .select("id, slug, name, image_url, gallery, short_description, price, promo_price, stock, delivery_cost, provinces, cities, delivery_time, active, created_at, action_button_text, action_button_color")
+        .select("id, slug, name, image_url, gallery, short_description, price, promo_price, stock, delivery_cost, provinces, cities, delivery_time, active, created_at, action_button_text, action_button_color, timer_minutes, timer_seconds, timer_color")
 
         .eq("slug", slug)
         .eq("active", true)
@@ -186,7 +188,10 @@ function CheckoutPage() {
   return (
     <div className="min-h-screen bg-muted/40 pb-28">
       <div className="mx-auto max-w-lg px-4 py-5">
+        <CountdownTimer product={product} />
+
         {/* Produto */}
+
         <Card className="overflow-hidden py-0">
           <div className="aspect-4/3 w-full bg-muted">
             {product.image_url ? (
@@ -411,7 +416,47 @@ function CheckoutPage() {
   );
 }
 
+function CountdownTimer({ product }: { product: any }) {
+  const [timeLeft, setTimeLeft] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (product) {
+      const minutes = product.timer_minutes ?? 10;
+      const seconds = product.timer_seconds ?? 0;
+      setTimeLeft(minutes * 60 + seconds);
+    }
+  }, [product]);
+
+  useEffect(() => {
+    if (timeLeft === null || timeLeft <= 0) return;
+    const interval = setInterval(() => {
+      setTimeLeft((prev) => (prev && prev > 0 ? prev - 1 : 0));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [timeLeft]);
+
+  if (timeLeft === null || timeLeft <= 0) return null;
+
+  const m = Math.floor(timeLeft / 60);
+  const s = timeLeft % 60;
+  const color = product.timer_color || "#ef4444";
+
+  return (
+    <div 
+      className="mb-4 flex items-center justify-center gap-2 rounded-lg border py-3 font-bold animate-pulse"
+      style={{ borderColor: `${color}40`, backgroundColor: `${color}10`, color: color }}
+    >
+      <Timer className="size-5" />
+      <span>PROMOÇÃO TERMINA EM:</span>
+      <span className="tabular-nums">
+        {String(m).padStart(2, '0')}:{String(s).padStart(2, '0')}
+      </span>
+    </div>
+  );
+}
+
 function Field({
+
   label,
   error,
   children,
