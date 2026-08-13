@@ -342,7 +342,7 @@ function ProductsPage() {
           </DialogHeader>
 
           <div className="space-y-6">
-            <div className="space-y-3">
+            <section className="space-y-3">
               <h3 className="text-sm font-semibold text-foreground">Informações do produto</h3>
               <Field label="Nome do produto">
                 <Input
@@ -363,6 +363,49 @@ function ProductsPage() {
                   onChange={(e) => setForm((f) => ({ ...f, short_description: e.target.value }))}
                 />
               </Field>
+
+              <div className="space-y-1.5">
+                <Label className="text-xs">Foto do produto</Label>
+                {form.image_url ? (
+                  <div className="relative aspect-video w-full overflow-hidden rounded-lg border border-border">
+                    <img src={form.image_url} alt="Preview" className="h-full w-full object-cover" />
+                    <Button
+                      type="button"
+                      size="icon"
+                      variant="destructive"
+                      className="absolute top-2 right-2 size-8"
+                      onClick={() => setForm((f) => ({ ...f, image_url: "" }))}
+                    >
+                      <Trash2 className="size-4" />
+                    </Button>
+                  </div>
+                ) : (
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    onChange={async (e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      try {
+                        const fileExt = file.name.split(".").pop();
+                        const fileName = `${Math.random().toString(36).slice(2)}.${fileExt}`;
+                        const { error, data } = await supabase.storage
+                          .from("product-images")
+                          .upload(fileName, file);
+                        if (error) throw error;
+                        const { data: { publicUrl } } = supabase.storage
+                          .from("product-images")
+                          .getPublicUrl(data.path);
+                        setForm((f) => ({ ...f, image_url: publicUrl }));
+                        toast.success("Imagem carregada.");
+                      } catch (err: any) {
+                        toast.error(`Erro: ${err.message}`);
+                      }
+                    }}
+                  />
+                )}
+              </div>
+
               <div className="grid grid-cols-2 gap-3">
                 <Field label="Preço (MT)">
                   <Input
@@ -379,26 +422,47 @@ function ProductsPage() {
                   />
                 </Field>
               </div>
-            </div>
+            </section>
 
-            <div className="space-y-3">
-              <h3 className="text-sm font-semibold text-foreground">Stock</h3>
-              <Field label="Quantidade disponível">
-                <Input
-                  inputMode="numeric"
-                  value={form.stock}
-                  onChange={(e) => setForm((f) => ({ ...f, stock: e.target.value }))}
+            <section className="space-y-3">
+              <h3 className="text-sm font-semibold text-foreground border-t pt-4">Stock</h3>
+              <div className="grid grid-cols-2 gap-3">
+                <Field label="Stock disponível">
+                  <Input
+                    inputMode="numeric"
+                    value={form.stock}
+                    onChange={(e) => setForm((f) => ({ ...f, stock: e.target.value }))}
+                  />
+                </Field>
+              </div>
+              <div className="flex items-center justify-between gap-2">
+                <Label htmlFor="show_stock" className="text-xs">Mostrar aviso de stock no checkout</Label>
+                <Switch
+                  id="show_stock"
+                  checked={form.show_stock_warning}
+                  onCheckedChange={(v) => setForm((f) => ({ ...f, show_stock_warning: v }))}
                 />
-              </Field>
-            </div>
+              </div>
+              {form.show_stock_warning && (
+                <Field label="Mensagem de urgência">
+                  <Input
+                    value={form.stock_urgency_message}
+                    onChange={(e) => setForm((f) => ({ ...f, stock_urgency_message: e.target.value }))}
+                  />
+                </Field>
+              )}
+              <div className="flex items-center justify-between gap-2">
+                <Label htmlFor="continue_selling" className="text-xs">Continuar vendendo sem stock</Label>
+                <Switch
+                  id="continue_selling"
+                  checked={form.continue_selling_no_stock}
+                  onCheckedChange={(v) => setForm((f) => ({ ...f, continue_selling_no_stock: v }))}
+                />
+              </div>
+            </section>
 
-            <div className="space-y-3">
-              <h3 className="text-sm font-semibold text-foreground">Depoimentos</h3>
-              <p className="text-xs text-muted-foreground">Gestão de depoimentos disponível em breve.</p>
-            </div>
-
-            <div className="space-y-3">
-              <h3 className="text-sm font-semibold text-foreground">Disponibilidade</h3>
+            <section className="space-y-3">
+              <h3 className="text-sm font-semibold text-foreground border-t pt-4">Disponibilidade</h3>
               <Field label="Cidades atendidas (separadas por vírgula)">
                 <Input
                   value={form.cities}
@@ -406,7 +470,243 @@ function ProductsPage() {
                   placeholder="Maputo, Matola, Beira"
                 />
               </Field>
-            </div>
+              <div className="space-y-2">
+                <Label className="text-xs">Províncias com entrega</Label>
+                <div className="flex flex-wrap gap-2">
+                  {PROVINCES.map((prov) => {
+                    const on = form.provinces.includes(prov);
+                    return (
+                      <button
+                        key={prov}
+                        type="button"
+                        onClick={() =>
+                          setForm((f) => ({
+                            ...f,
+                            provinces: on
+                              ? f.provinces.filter((p) => p !== prov)
+                              : [...f.provinces, prov],
+                          }))
+                        }
+                        className={`rounded-full border px-3 py-1 text-[10px] transition ${
+                          on
+                            ? "border-primary bg-primary text-primary-foreground"
+                            : "border-border text-muted-foreground"
+                        }`}
+                      >
+                        {prov}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </section>
+
+            <section className="space-y-3">
+              <div className="flex items-center justify-between border-t pt-4">
+                <h3 className="text-sm font-semibold text-foreground">Depoimentos</h3>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() =>
+                    setForm((f) => ({
+                      ...f,
+                      testimonials: [
+                        ...f.testimonials,
+                        { image_url: "", name: "", city: "", text: "" },
+                      ],
+                    }))
+                  }
+                >
+                  <Plus className="size-3 mr-1" /> Adicionar
+                </Button>
+              </div>
+
+              <div className="space-y-4">
+                {form.testimonials.map((t, i) => (
+                  <Card key={i} className="relative overflow-hidden border-dashed">
+                    <CardContent className="p-3 space-y-3">
+                      <div className="flex items-start gap-3">
+                        <div className="relative size-16 shrink-0 overflow-hidden rounded-md border border-border bg-muted">
+                          {t.image_url ? (
+                            <img src={t.image_url} className="size-full object-cover" />
+                          ) : (
+                            <div className="flex size-full items-center justify-center">
+                              <User className="size-6 text-muted-foreground/40" />
+                            </div>
+                          )}
+                          <input
+                            type="file"
+                            className="absolute inset-0 opacity-0 cursor-pointer"
+                            onChange={async (e) => {
+                              const file = e.target.files?.[0];
+                              if (!file) return;
+                              const fileName = `testimonial-${Math.random().toString(36).slice(2)}`;
+                              const { error, data } = await supabase.storage
+                                .from("product-images")
+                                .upload(fileName, file);
+                              if (!error && data) {
+                                const { data: { publicUrl } } = supabase.storage
+                                  .from("product-images")
+                                  .getPublicUrl(data.path);
+                                setForm((f) => {
+                                  const updated = [...f.testimonials];
+                                  updated[i] = { ...updated[i], image_url: publicUrl };
+                                  return { ...f, testimonials: updated };
+                                });
+                              }
+                            }}
+                          />
+                        </div>
+                        <div className="flex-1 space-y-2">
+                          <Input
+                            placeholder="Nome (opcional)"
+                            className="h-8 text-xs"
+                            value={t.name}
+                            onChange={(e) => {
+                              const updated = [...form.testimonials];
+                              updated[i] = { ...updated[i], name: e.target.value };
+                              setForm((f) => ({ ...f, testimonials: updated }));
+                            }}
+                          />
+                          <Input
+                            placeholder="Cidade (opcional)"
+                            className="h-8 text-xs"
+                            value={t.city}
+                            onChange={(e) => {
+                              const updated = [...form.testimonials];
+                              updated[i] = { ...updated[i], city: e.target.value };
+                              setForm((f) => ({ ...f, testimonials: updated }));
+                            }}
+                          />
+                        </div>
+                      </div>
+                      <Textarea
+                        placeholder="Texto do depoimento..."
+                        className="text-xs"
+                        rows={2}
+                        value={t.text}
+                        onChange={(e) => {
+                          const updated = [...form.testimonials];
+                          updated[i] = { ...updated[i], text: e.target.value };
+                          setForm((f) => ({ ...f, testimonials: updated }));
+                        }}
+                      />
+                      <div className="flex justify-end gap-1">
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          className="size-7"
+                          disabled={i === 0}
+                          onClick={() => {
+                            const updated = [...form.testimonials];
+                            [updated[i - 1], updated[i]] = [updated[i], updated[i - 1]];
+                            setForm((f) => ({ ...f, testimonials: updated }));
+                          }}
+                        >
+                          <ChevronUp className="size-3" />
+                        </Button>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          className="size-7"
+                          disabled={i === form.testimonials.length - 1}
+                          onClick={() => {
+                            const updated = [...form.testimonials];
+                            [updated[i + 1], updated[i]] = [updated[i], updated[i + 1]];
+                            setForm((f) => ({ ...f, testimonials: updated }));
+                          }}
+                        >
+                          <ChevronDown className="size-3" />
+                        </Button>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          className="size-7 text-status-danger"
+                          onClick={() => {
+                            const updated = form.testimonials.filter((_, idx) => idx !== i);
+                            setForm((f) => ({ ...f, testimonials: updated }));
+                          }}
+                        >
+                          <Trash2 className="size-3" />
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+                {form.testimonials.length === 0 && (
+                  <p className="text-center text-xs text-muted-foreground py-4">Sem depoimentos.</p>
+                )}
+              </div>
+            </section>
+
+            <section className="space-y-3">
+              <h3 className="text-sm font-semibold text-foreground border-t pt-4">Checkout</h3>
+              <div className="grid grid-cols-2 gap-3">
+                <Field label="Texto do botão">
+                  <Input
+                    value={form.action_button_text}
+                    onChange={(e) => setForm((f) => ({ ...f, action_button_text: e.target.value }))}
+                  />
+                </Field>
+                <Field label="Cor do botão">
+                  <Input
+                    type="color"
+                    className="h-9 p-1"
+                    value={form.action_button_color}
+                    onChange={(e) => setForm((f) => ({ ...f, action_button_color: e.target.value }))}
+                  />
+                </Field>
+              </div>
+              <div className="grid grid-cols-3 gap-3">
+                <Field label="Min. Cron.">
+                  <Input
+                    inputMode="numeric"
+                    value={form.timer_minutes}
+                    onChange={(e) => setForm((f) => ({ ...f, timer_minutes: e.target.value }))}
+                  />
+                </Field>
+                <Field label="Seg. Cron.">
+                  <Input
+                    inputMode="numeric"
+                    value={form.timer_seconds}
+                    onChange={(e) => setForm((f) => ({ ...f, timer_seconds: e.target.value }))}
+                  />
+                </Field>
+                <Field label="Cor Cron.">
+                  <Input
+                    type="color"
+                    className="h-9 p-1"
+                    value={form.timer_color}
+                    onChange={(e) => setForm((f) => ({ ...f, timer_color: e.target.value }))}
+                  />
+                </Field>
+              </div>
+            </section>
+
+            <section className="space-y-3">
+              <h3 className="text-sm font-semibold text-foreground border-t pt-4">Atividade recente</h3>
+              <div className="flex items-center justify-between gap-2">
+                <Label htmlFor="show_activity" className="text-xs">Mostrar atividade no checkout</Label>
+                <Switch
+                  id="show_activity"
+                  checked={form.show_recent_activity}
+                  onCheckedChange={(v) => setForm((f) => ({ ...f, show_recent_activity: v }))}
+                />
+              </div>
+              {form.show_recent_activity && (
+                <Field label="Frequência (segundos)">
+                  <Input
+                    inputMode="numeric"
+                    value={form.recent_activity_frequency}
+                    onChange={(e) => setForm((f) => ({ ...f, recent_activity_frequency: e.target.value }))}
+                  />
+                </Field>
+              )}
+            </section>
 
             <div className="flex items-center justify-between rounded-lg border border-border p-3">
               <Label htmlFor="active">Produto activo no checkout</Label>
