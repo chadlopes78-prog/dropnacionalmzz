@@ -82,7 +82,12 @@ export function OrdersTable({
                       <span className="text-[10px] text-muted-foreground">{formatDateTime(o.created_at)}</span>
                     </div>
                   </TableCell>
-                  <TableCell className="font-medium text-blue-600">+258 {o.phone}</TableCell>
+                  <TableCell className="font-medium text-blue-600">
+                    <div className="flex flex-col">
+                      <span>+258 {o.phone}</span>
+                      {o.phone_secondary && <span className="text-[10px] text-muted-foreground">+258 {o.phone_secondary}</span>}
+                    </div>
+                  </TableCell>
                   <TableCell>{o.province}</TableCell>
                   <TableCell>
                     <div className="flex flex-col">
@@ -139,7 +144,10 @@ export function OrdersTable({
               <div className="flex items-start justify-between">
                 <div className="flex flex-col">
                   <h3 className="text-lg font-black text-foreground">{o.customer_name}</h3>
-                  <p className="text-sm font-bold text-blue-600">+258 {o.phone}</p>
+                  <div className="flex flex-col">
+                    <p className="text-sm font-bold text-blue-600">+258 {o.phone}</p>
+                    {o.phone_secondary && <p className="text-[10px] font-medium text-muted-foreground">+258 {o.phone_secondary}</p>}
+                  </div>
                 </div>
                 <StatusBadge status={o.status} />
               </div>
