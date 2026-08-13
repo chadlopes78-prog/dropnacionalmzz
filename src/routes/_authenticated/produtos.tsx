@@ -601,8 +601,13 @@ function ProductsPage() {
                           disabled={i === 0}
                           onClick={() => {
                             const updated = [...form.testimonials];
-                            [updated[i - 1], updated[i]] = [updated[i], updated[i - 1]];
-                            setForm((f) => ({ ...f, testimonials: updated }));
+                            const prev = updated[i - 1];
+                            const curr = updated[i];
+                            if (prev && curr) {
+                              updated[i - 1] = curr;
+                              updated[i] = prev;
+                              setForm((f) => ({ ...f, testimonials: updated }));
+                            }
                           }}
                         >
                           <ChevronUp className="size-3" />
@@ -615,8 +620,13 @@ function ProductsPage() {
                           disabled={i === form.testimonials.length - 1}
                           onClick={() => {
                             const updated = [...form.testimonials];
-                            [updated[i + 1], updated[i]] = [updated[i], updated[i + 1]];
-                            setForm((f) => ({ ...f, testimonials: updated }));
+                            const next = updated[i + 1];
+                            const curr = updated[i];
+                            if (next && curr) {
+                              updated[i + 1] = curr;
+                              updated[i] = next;
+                              setForm((f) => ({ ...f, testimonials: updated }));
+                            }
                           }}
                         >
                           <ChevronDown className="size-3" />
