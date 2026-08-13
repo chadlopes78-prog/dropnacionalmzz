@@ -192,7 +192,6 @@ function CheckoutPage() {
         <CountdownTimer product={product} />
 
         {/* Produto */}
-
         <Card className="overflow-hidden py-0">
           <div className="aspect-4/3 w-full bg-muted">
             {product.image_url ? (
@@ -218,16 +217,26 @@ function CheckoutPage() {
                 </span>
               ) : null}
             </div>
+
             <div className="rounded-lg border border-primary/25 bg-primary/8 p-3">
               <p className="flex items-center gap-2 text-sm font-semibold text-primary">
                 <ShieldCheck className="size-4" aria-hidden /> PAGAMENTO NA ENTREGA
               </p>
               <p className="mt-1 text-sm text-foreground">Só paga quando receber o produto.</p>
             </div>
-            <p className="text-xs text-muted-foreground">
-              Faça a sua encomenda agora. A nossa equipa entrará em contacto consigo para confirmar
-              os dados e combinar a entrega.
-            </p>
+
+            {/* Aviso de Stock */}
+            {product.show_stock_warning && (
+              <div className="space-y-1 rounded-lg border border-status-danger/20 bg-status-danger/5 p-3">
+                <p className="flex items-center gap-2 text-sm font-bold text-status-danger">
+                  <span className="animate-pulse">🔥</span> Restam apenas {product.stock} unidades disponíveis
+                </p>
+                {product.stock_urgency_message && (
+                  <p className="text-xs text-status-danger/80">{product.stock_urgency_message}</p>
+                )}
+              </div>
+            )}
+
             {product.delivery_time ? (
               <p className="flex items-center gap-2 text-xs text-muted-foreground">
                 <Truck className="size-3.5" aria-hidden /> Prazo de entrega: {product.delivery_time}
@@ -235,6 +244,9 @@ function CheckoutPage() {
             ) : null}
           </CardContent>
         </Card>
+
+        {/* Notificação de Atividade Recente */}
+        <RecentActivity product={product} />
 
         {/* Formulário */}
         <form onSubmit={submit} className="mt-4 space-y-4">
@@ -406,6 +418,165 @@ function CheckoutPage() {
             Não é necessário pagar agora. Sem M-Pesa, e-Mola ou cartão.
           </p>
         </form>
+
+        {/* Depoimentos */}
+        {product.testimonials && product.testimonials.length > 0 && (
+          <div className="mt-8 space-y-4">
+            <h2 className="px-2 text-center text-lg font-bold text-foreground">
+              Veja o que os nossos clientes dizem
+            </h2>
+            <TestimonialsCarousel testimonials={product.testimonials} />
+          </div>
+        )}
+
+        {/* Informações de confiança */}
+        <div className="mt-8 space-y-4 px-2 pb-10">
+          <div className="flex items-center gap-3 rounded-xl border border-border bg-card p-4">
+            <div className="flex size-10 items-center justify-center rounded-full bg-status-ok/10 text-status-ok">
+              <ShieldCheck className="size-6" />
+            </div>
+            <div>
+              <p className="text-sm font-bold text-foreground">Compra 100% Segura</p>
+              <p className="text-xs text-muted-foreground">Privacidade e segurança garantidas.</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-3 rounded-xl border border-border bg-card p-4">
+            <div className="flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary">
+              <Truck className="size-6" />
+            </div>
+            <div>
+              <p className="text-sm font-bold text-foreground">Entrega em todo Moçambique</p>
+              <p className="text-xs text-muted-foreground">Receba no conforto da sua casa.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function TestimonialsCarousel({ testimonials }: { testimonials: any[] }) {
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    if (testimonials.length <= 1) return;
+    const interval = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % testimonials.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [testimonials.length]);
+
+  return (
+    <div className="relative overflow-hidden px-1">
+      <div 
+        className="flex transition-transform duration-500 ease-in-out"
+        style={{ transform: `translateX(-${current * 100}%)` }}
+      >
+        {testimonials.map((t, i) => (
+          <div key={i} className="w-full shrink-0 px-1">
+            <Card className="border-none bg-card shadow-sm">
+              <CardContent className="p-4 space-y-3">
+                {t.image_url && (
+                  <div className="aspect-video w-full overflow-hidden rounded-lg bg-muted">
+                    <img src={t.image_url} className="size-full object-cover" alt="Depoimento" />
+                  </div>
+                )}
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between">
+                    <p className="font-bold text-foreground">{t.name || "Cliente Satisfeito"}</p>
+                    <p className="text-[10px] uppercase text-muted-foreground">{t.city}</p>
+                  </div>
+                  <p className="text-sm leading-relaxed text-muted-foreground italic">"{t.text}"</p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        ))}
+      </div>
+      {testimonials.length > 1 && (
+        <div className="mt-3 flex justify-center gap-1.5">
+          {testimonials.map((_, i) => (
+            <div
+              key={i}
+              className={cn(
+                "size-1.5 rounded-full transition-all",
+                i === current ? "w-4 bg-primary" : "bg-muted"
+              )}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+const COMMON_NAMES = [
+  "João", "Carlos", "Paulo", "José", "Manuel", "António",
+  "Maria", "Ana", "Helena", "Carla", "Marta", "Isabel",
+  "Francisco", "Ricardo", "Luís", "Fernando", "Beatriz", "Sónia"
+];
+
+function RecentActivity({ product }: { product: any }) {
+  const [activity, setActivity] = useState<{ name: string; city: string; time: string } | null>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    if (!product.show_recent_activity) return;
+
+    const showNewActivity = () => {
+      const name = COMMON_NAMES[Math.floor(Math.random() * COMMON_NAMES.length)];
+      
+      // Lógica de cidades permitidas
+      let city = "Moçambique";
+      const productCities = product.cities || [];
+      const productProvinces = product.provinces || [];
+      
+      if (productCities.length > 0) {
+        city = productCities[Math.floor(Math.random() * productCities.length)];
+      } else if (productProvinces.length > 0) {
+        city = productProvinces[Math.floor(Math.random() * productProvinces.length)];
+      } else {
+        const allCities = ["Maputo", "Matola", "Beira", "Nampula", "Chimoio", "Tete", "Quelimane", "Pemba"];
+        city = allCities[Math.floor(Math.random() * allCities.length)];
+      }
+
+      const times = ["há poucos segundos", "acabou de encomendar", "há 2 minutos", "há 5 minutos"];
+      const time = times[Math.floor(Math.random() * times.length)];
+
+      setActivity({ name, city, time });
+      setVisible(true);
+
+      // Esconder após 5 segundos
+      setTimeout(() => setVisible(false), 5000);
+    };
+
+    // Primeira atividade após 3s
+    const firstTimeout = setTimeout(showNewActivity, 3000);
+
+    const interval = setInterval(showNewActivity, (product.recent_activity_frequency || 30) * 1000);
+
+    return () => {
+      clearTimeout(firstTimeout);
+      clearInterval(interval);
+    };
+  }, [product]);
+
+  if (!activity) return null;
+
+  return (
+    <div 
+      className={cn(
+        "fixed bottom-[max(5.5rem,calc(env(safe-area-inset-bottom)+5.5rem))] left-4 right-4 z-50 transition-all duration-500 lg:bottom-4 lg:left-4 lg:right-auto lg:w-80",
+        visible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0 pointer-events-none"
+      )}
+    >
+      <div className="flex items-center gap-3 rounded-full border border-border bg-background/95 p-2 pr-4 shadow-xl backdrop-blur-sm">
+        <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+          <ShieldCheck className="size-4" />
+        </div>
+        <p className="text-[11px] leading-tight text-foreground">
+          <span className="font-bold">{activity.name}</span>, de <span className="font-bold">{activity.city}</span>, {activity.time}.
+        </p>
       </div>
     </div>
   );
