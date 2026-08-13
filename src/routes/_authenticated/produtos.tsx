@@ -179,6 +179,12 @@ function ProductsPage() {
         timer_minutes: Number(form.timer_minutes) || 0,
         timer_seconds: Number(form.timer_seconds) || 0,
         timer_color: form.timer_color.trim() || "#ef4444",
+        show_stock_warning: form.show_stock_warning,
+        stock_urgency_message: form.stock_urgency_message,
+        continue_selling_no_stock: form.continue_selling_no_stock,
+        show_recent_activity: form.show_recent_activity,
+        recent_activity_frequency: Number(form.recent_activity_frequency) || 30,
+        testimonials: form.testimonials,
       };
 
 
