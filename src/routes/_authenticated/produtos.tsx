@@ -387,6 +387,34 @@ function ProductsPage() {
               </Field>
             </div>
 
+            <div className="grid grid-cols-3 gap-3">
+              <Field label="Minutos do Cron.">
+                <Input
+                  inputMode="numeric"
+                  value={form.timer_minutes}
+                  onChange={(e) => setForm((f) => ({ ...f, timer_minutes: e.target.value }))}
+                />
+              </Field>
+              <Field label="Segundos do Cron.">
+                <Input
+                  inputMode="numeric"
+                  value={form.timer_seconds}
+                  onChange={(e) => setForm((f) => ({ ...f, timer_seconds: e.target.value }))}
+                />
+              </Field>
+              <Field label="Cor do Cron.">
+                <div className="flex gap-2">
+                  <Input
+                    type="color"
+                    className="h-9 w-full p-1"
+                    value={form.timer_color}
+                    onChange={(e) => setForm((f) => ({ ...f, timer_color: e.target.value }))}
+                  />
+                </div>
+              </Field>
+            </div>
+
+
             <div className="space-y-1.5">
               <Label className="text-xs">Imagem do produto</Label>
               <div className="flex flex-col gap-2">
