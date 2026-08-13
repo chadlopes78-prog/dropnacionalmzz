@@ -118,11 +118,20 @@ export function OrderDrawer({ order, allOrders, open, onOpenChange }: OrderDrawe
 
             {/* Acções Principais - Painel de Acompanhamento */}
             <div className="grid grid-cols-1 gap-3">
-              <Button size="lg" className="h-14 gap-3 text-lg font-black shadow-lg shadow-primary/20" asChild>
-                <a href={telLink(order.phone)}>
-                  <Phone className="size-6" /> LIGAR AGORA
-                </a>
-              </Button>
+              <div className="grid grid-cols-1 gap-3">
+                <Button size="lg" className="h-14 gap-3 text-lg font-black shadow-lg shadow-primary/20" asChild>
+                  <a href={telLink(order.phone)}>
+                    <Phone className="size-6" /> LIGAR TELEFONE 1
+                  </a>
+                </Button>
+                {order.phone_secondary && (
+                  <Button size="lg" variant="outline" className="h-14 gap-3 text-lg font-black border-2 border-primary text-primary" asChild>
+                    <a href={telLink(order.phone_secondary)}>
+                      <Phone className="size-6" /> LIGAR TELEFONE 2
+                    </a>
+                  </Button>
+                )}
+              </div>
               
               <div className="grid grid-cols-2 gap-2">
                 <Button
@@ -172,7 +181,10 @@ export function OrderDrawer({ order, allOrders, open, onOpenChange }: OrderDrawe
                 <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Cliente e Localização</h3>
                 <div className="rounded-xl border border-border bg-muted/20 p-4 space-y-3">
                   <DetailRow label="Nome" value={order.customer_name} />
-                  <DetailRow label="Telefone" value={`+258 ${order.phone}`} />
+                  <DetailRow label="Telefone 1" value={`+258 ${order.phone}`} />
+                  {order.phone_secondary && (
+                    <DetailRow label="Telefone 2" value={`+258 ${order.phone_secondary}`} />
+                  )}
                   <Separator className="opacity-50" />
                   <DetailRow label="Província" value={order.province} />
                   <DetailRow label="Cidade / Distrito" value={order.city} />

@@ -90,7 +90,10 @@ function OrderReceipt() {
                     <span className="text-primary">{formatMT(order.total)}</span>
                   </div>
                   <Row label="Nome" value={order.customer_name} />
-                  <Row label="Telefone" value={order.phone} />
+                  <Row label="Telefone 1" value={order.phone} />
+                  {order.phone_secondary && (
+                    <Row label="Telefone 2" value={order.phone_secondary} />
+                  )}
                   <Row label="Província" value={order.province} />
                   <Row label="Cidade/Distrito" value={order.city} />
                   <Row label="Bairro" value={order.neighborhood} />

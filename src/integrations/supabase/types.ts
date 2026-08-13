@@ -91,6 +91,7 @@ export type Database = {
           neighborhood: string
           order_number: number
           phone: string
+          phone_secondary: string | null
           product_id: string | null
           product_name: string
           province: string
@@ -116,6 +117,7 @@ export type Database = {
           neighborhood: string
           order_number?: number
           phone: string
+          phone_secondary?: string | null
           product_id?: string | null
           product_name: string
           province: string
@@ -141,6 +143,7 @@ export type Database = {
           neighborhood?: string
           order_number?: number
           phone?: string
+          phone_secondary?: string | null
           product_id?: string | null
           product_name?: string
           province?: string
@@ -316,6 +319,7 @@ export type Database = {
           neighborhood: string
           order_number: number
           phone: string
+          phone_secondary: string
           product_name: string
           province: string
           quantity: number

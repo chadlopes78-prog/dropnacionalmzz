@@ -53,6 +53,7 @@ export const Route = createFileRoute("/checkout/$slug")({
 interface FormState {
   customer_name: string;
   phone: string;
+  phone_secondary: string;
   province: string;
   city: string;
   neighborhood: string;
@@ -64,6 +65,7 @@ interface FormState {
 const EMPTY_FORM: FormState = {
   customer_name: "",
   phone: "",
+  phone_secondary: "",
   province: "",
   city: "",
   neighborhood: "",
@@ -114,6 +116,8 @@ function CheckoutPage() {
     if (form.customer_name.trim().length < 3) next.customer_name = "Indique o seu nome completo.";
     if (!isValidMozPhone(form.phone))
       next.phone = "Número inválido. Use 84, 85, 86 ou 87 seguido de 7 dígitos.";
+    if (form.phone_secondary && !isValidMozPhone(form.phone_secondary))
+      next.phone_secondary = "Número secundário inválido.";
     if (!form.province) next.province = "Escolha a província.";
     if (!form.city.trim()) next.city = "Indique a cidade ou distrito.";
     if (!form.neighborhood.trim()) next.neighborhood = "Indique o bairro.";
@@ -145,6 +149,7 @@ function CheckoutPage() {
       quantity,
       customer_name: form.customer_name.trim(),
       phone: digitsOnly(form.phone).replace(/^258/, ""),
+      phone_secondary: form.phone_secondary ? digitsOnly(form.phone_secondary).replace(/^258/, "") : null,
       province: form.province,
       city: form.city.trim(),
       neighborhood: form.neighborhood.trim(),
@@ -264,7 +269,7 @@ function CheckoutPage() {
                 />
               </Field>
 
-              <Field label="Número de telefone" error={errors.phone}>
+              <Field label="Número de telefone 1" error={errors.phone}>
                 <Input
                   className="h-12"
                   value={form.phone}
@@ -274,6 +279,18 @@ function CheckoutPage() {
                   autoComplete="tel"
                   onChange={(e) => set("phone", digitsOnly(e.target.value))}
                   placeholder="84XXXXXXX"
+                />
+              </Field>
+
+              <Field label="Número de telefone 2 (opcional)" error={errors.phone_secondary}>
+                <Input
+                  className="h-12"
+                  value={form.phone_secondary}
+                  inputMode="numeric"
+                  type="tel"
+                  maxLength={12}
+                  onChange={(e) => set("phone_secondary", digitsOnly(e.target.value))}
+                  placeholder="8XXXXXXX"
                 />
               </Field>
 
