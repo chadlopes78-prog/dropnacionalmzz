@@ -39,20 +39,12 @@ const NAVIGATION_GROUPS = [
       { to: "/confirmadas", label: "Confirmadas", icon: Check },
       { to: "/em-entrega", label: "Em Entrega", icon: Truck },
       { to: "/entregues", label: "Entregues", icon: CheckCircle2 },
-      { to: "/canceladas", label: "Canceladas", icon: XCircle },
-    ],
-  },
-  {
-    title: "ANÁLISE",
-    items: [
-      { to: "/relatorios", label: "Relatórios", icon: BarChart3 },
     ],
   },
   {
     title: "GESTÃO",
     items: [
       { to: "/equipa", label: "Equipa", icon: UsersRound },
-      { to: "/configuracoes", label: "Configurações", icon: Settings },
     ],
   },
 ] as const;
@@ -69,7 +61,7 @@ function NavList({ onNavigate }: { onNavigate?: () => void }) {
             {group.items.map(({ to, label, icon: Icon }) => (
               <Link
                 key={to}
-                to={to}
+                to={to as any}
                 onClick={onNavigate}
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-sidebar-foreground/75 transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                 activeProps={{
