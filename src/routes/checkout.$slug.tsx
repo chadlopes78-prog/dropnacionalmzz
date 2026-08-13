@@ -385,9 +385,23 @@ function CheckoutPage() {
             </CardContent>
           </Card>
 
-          <Button type="submit" size="lg" className="h-14 w-full text-base" disabled={submitting}>
-            {submitting ? <Loader2 className="size-5 animate-spin" /> : "FINALIZAR ENCOMENDA"}
+          <Button
+            type="submit"
+            size="lg"
+            className="h-14 w-full text-base font-bold shadow-lg transition-transform active:scale-[0.98]"
+            disabled={submitting}
+            style={{
+              backgroundColor: (product as any).action_button_color || "#0D9488",
+              color: "white",
+            }}
+          >
+            {submitting ? (
+              <Loader2 className="size-5 animate-spin" />
+            ) : (
+              (product as any).action_button_text || "FINALIZAR ENCOMENDA"
+            )}
           </Button>
+
           <p className="pb-2 text-center text-xs text-muted-foreground">
             Não é necessário pagar agora. Sem M-Pesa, e-Mola ou cartão.
           </p>
