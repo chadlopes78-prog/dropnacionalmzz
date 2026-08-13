@@ -354,13 +354,72 @@ function ProductsPage() {
                 />
               </Field>
             </div>
-            <Field label="URL da imagem principal">
-              <Input
-                value={form.image_url}
-                onChange={(e) => setForm((f) => ({ ...f, image_url: e.target.value }))}
-                placeholder="https://..."
-              />
-            </Field>
+            <div className="space-y-1.5">
+              <Label className="text-xs">Imagem do produto</Label>
+              <div className="flex flex-col gap-2">
+                {form.image_url ? (
+                  <div className="relative aspect-video w-full overflow-hidden rounded-lg border border-border">
+                    <img
+                      src={form.image_url}
+                      alt="Preview"
+                      className="h-full w-full object-cover"
+                    />
+                    <Button
+                      type="button"
+                      size="icon"
+                      variant="destructive"
+                      className="absolute top-2 right-2 size-8"
+                      onClick={() => setForm((f) => ({ ...f, image_url: "" }))}
+                    >
+                      <Trash2 className="size-4" />
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="flex flex-col gap-2">
+                    <Input
+                      type="file"
+                      accept="image/*"
+                      onChange={async (e) => {
+                        const file = e.target.files?.[0];
+                        if (!file) return;
+
+                        try {
+                          const fileExt = file.name.split(".").pop();
+                          const fileName = `${Math.random().toString(36).slice(2)}.${fileExt}`;
+                          const filePath = `${fileName}`;
+
+                          const { error: uploadError, data } = await supabase.storage
+                            .from("product-images")
+                            .upload(filePath, file);
+
+                          if (uploadError) throw uploadError;
+
+                          const { data: { publicUrl } } = supabase.storage
+                            .from("product-images")
+                            .getPublicUrl(data.path);
+
+                          setForm((f) => ({ ...f, image_url: publicUrl }));
+                          toast.success("Imagem carregada com sucesso.");
+                        } catch (err: any) {
+                          toast.error(`Erro ao carregar imagem: ${err.message}`);
+                        }
+                      }}
+                    />
+                    <div className="flex items-center gap-2">
+                      <div className="h-px flex-1 bg-border" />
+                      <span className="text-[10px] text-muted-foreground uppercase">Ou URL externa</span>
+                      <div className="h-px flex-1 bg-border" />
+                    </div>
+                    <Input
+                      value={form.image_url}
+                      onChange={(e) => setForm((f) => ({ ...f, image_url: e.target.value }))}
+                      placeholder="https://..."
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+
             <Field label="Cidades atendidas (separadas por vírgula)">
               <Input
                 value={form.cities}
