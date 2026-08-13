@@ -86,7 +86,8 @@ function CheckoutPage() {
       const { data, error } = await supabase
         .from("products")
         // A loja pública não tem acesso a custos internos; pedimos só colunas comerciais.
-        .select("id, slug, name, image_url, gallery, short_description, price, promo_price, stock, delivery_cost, provinces, cities, delivery_time, active, created_at, action_button_text, action_button_color, timer_minutes, timer_seconds, timer_color")
+        .select("id, slug, name, image_url, gallery, short_description, price, promo_price, stock, delivery_cost, provinces, cities, delivery_time, active, created_at, action_button_text, action_button_color, timer_minutes, timer_seconds, timer_color, show_stock_warning, stock_urgency_message, continue_selling_no_stock, show_recent_activity, recent_activity_frequency, testimonials")
+
 
         .eq("slug", slug)
         .eq("active", true)
