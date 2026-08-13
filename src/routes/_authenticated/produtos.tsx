@@ -57,7 +57,10 @@ interface FormState {
   provinces: string[];
   cities: string;
   active: boolean;
+  action_button_text: string;
+  action_button_color: string;
 }
+
 
 const EMPTY_FORM: FormState = {
   name: "",
@@ -73,6 +76,8 @@ const EMPTY_FORM: FormState = {
   provinces: [...PROVINCES],
   cities: "",
   active: true,
+  action_button_text: "Comprar Agora",
+  action_button_color: "#0D9488",
 };
 
 function toForm(p: Product): FormState {
@@ -90,8 +95,11 @@ function toForm(p: Product): FormState {
     provinces: p.provinces ?? [],
     cities: (p.cities ?? []).join(", "),
     active: p.active,
+    action_button_text: (p as any).action_button_text ?? "Comprar Agora",
+    action_button_color: (p as any).action_button_color ?? "#0D9488",
   };
 }
+
 
 function ProductsPage() {
   const { data: products, isLoading } = useProducts();
@@ -131,7 +139,10 @@ function ProductsPage() {
           .map((c) => c.trim())
           .filter(Boolean),
         active: form.active,
+        action_button_text: form.action_button_text.trim() || "Comprar Agora",
+        action_button_color: form.action_button_color.trim() || "#0D9488",
       };
+
 
       const { error } = editing
         ? await supabase.from("products").update(payload).eq("id", editing.id)
@@ -354,6 +365,32 @@ function ProductsPage() {
                 />
               </Field>
             </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <Field label="Texto do botão">
+                <Input
+                  value={form.action_button_text}
+                  onChange={(e) => setForm((f) => ({ ...f, action_button_text: e.target.value }))}
+                  placeholder="Comprar Agora"
+                />
+              </Field>
+              <Field label="Cor do botão">
+                <div className="flex gap-2">
+                  <Input
+                    type="color"
+                    className="h-9 w-12 p-1"
+                    value={form.action_button_color}
+                    onChange={(e) => setForm((f) => ({ ...f, action_button_color: e.target.value }))}
+                  />
+                  <Input
+                    value={form.action_button_color}
+                    onChange={(e) => setForm((f) => ({ ...f, action_button_color: e.target.value }))}
+                    placeholder="#0D9488"
+                  />
+                </div>
+              </Field>
+            </div>
+
             <div className="space-y-1.5">
               <Label className="text-xs">Imagem do produto</Label>
               <div className="flex flex-col gap-2">

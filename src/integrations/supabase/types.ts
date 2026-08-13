@@ -163,6 +163,8 @@ export type Database = {
       }
       products: {
         Row: {
+          action_button_color: string | null
+          action_button_text: string | null
           active: boolean
           cities: string[]
           created_at: string
@@ -182,6 +184,8 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          action_button_color?: string | null
+          action_button_text?: string | null
           active?: boolean
           cities?: string[]
           created_at?: string
@@ -201,6 +205,8 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          action_button_color?: string | null
+          action_button_text?: string | null
           active?: boolean
           cities?: string[]
           created_at?: string

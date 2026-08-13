@@ -84,7 +84,8 @@ function CheckoutPage() {
       const { data, error } = await supabase
         .from("products")
         // A loja pública não tem acesso a custos internos; pedimos só colunas comerciais.
-        .select("id, slug, name, image_url, gallery, short_description, price, promo_price, stock, delivery_cost, provinces, cities, delivery_time, active, created_at")
+        .select("id, slug, name, image_url, gallery, short_description, price, promo_price, stock, delivery_cost, provinces, cities, delivery_time, active, created_at, action_button_text, action_button_color")
+
         .eq("slug", slug)
         .eq("active", true)
         .maybeSingle();
@@ -384,9 +385,23 @@ function CheckoutPage() {
             </CardContent>
           </Card>
 
-          <Button type="submit" size="lg" className="h-14 w-full text-base" disabled={submitting}>
-            {submitting ? <Loader2 className="size-5 animate-spin" /> : "FINALIZAR ENCOMENDA"}
+          <Button
+            type="submit"
+            size="lg"
+            className="h-14 w-full text-base font-bold shadow-lg transition-transform active:scale-[0.98]"
+            disabled={submitting}
+            style={{
+              backgroundColor: (product as any).action_button_color || "#0D9488",
+              color: "white",
+            }}
+          >
+            {submitting ? (
+              <Loader2 className="size-5 animate-spin" />
+            ) : (
+              (product as any).action_button_text || "FINALIZAR ENCOMENDA"
+            )}
           </Button>
+
           <p className="pb-2 text-center text-xs text-muted-foreground">
             Não é necessário pagar agora. Sem M-Pesa, e-Mola ou cartão.
           </p>
