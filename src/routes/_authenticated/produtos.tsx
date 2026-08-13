@@ -312,169 +312,49 @@ function ProductsPage() {
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-3">
-            <Field label="Nome do produto">
-              <Input
-                value={form.name}
-                onChange={(e) =>
-                  setForm((f) => ({
-                    ...f,
-                    name: e.target.value,
-                    slug: editing ? f.slug : slugify(e.target.value),
-                  }))
-                }
-              />
-            </Field>
-            <Field label="Descrição curta">
-              <Textarea
-                rows={3}
-                value={form.short_description}
-                onChange={(e) => setForm((f) => ({ ...f, short_description: e.target.value }))}
-              />
-            </Field>
-            <div className="grid grid-cols-2 gap-3">
-              <Field label="Preço (MT)">
+          <div className="space-y-6">
+            <div className="space-y-3">
+              <h3 className="text-sm font-semibold text-foreground">Informações do produto</h3>
+              <Field label="Nome do produto">
                 <Input
-                  inputMode="decimal"
-                  value={form.price}
-                  onChange={(e) => setForm((f) => ({ ...f, price: e.target.value }))}
+                  value={form.name}
+                  onChange={(e) =>
+                    setForm((f) => ({
+                      ...f,
+                      name: e.target.value,
+                      slug: editing ? f.slug : slugify(e.target.value),
+                    }))
+                  }
                 />
               </Field>
-              <Field label="Preço promocional (MT)">
-                <Input
-                  inputMode="decimal"
-                  value={form.promo_price}
-                  onChange={(e) => setForm((f) => ({ ...f, promo_price: e.target.value }))}
-                />
-              </Field>
-              <Field label="Stock disponível">
-                <Input
-                  inputMode="numeric"
-                  value={form.stock}
-                  onChange={(e) => setForm((f) => ({ ...f, stock: e.target.value }))}
-                />
-              </Field>
-              <Field label="Tempo de entrega">
-                <Input
-                  value={form.delivery_time}
-                  onChange={(e) => setForm((f) => ({ ...f, delivery_time: e.target.value }))}
+              <Field label="Descrição curta">
+                <Textarea
+                  rows={3}
+                  value={form.short_description}
+                  onChange={(e) => setForm((f) => ({ ...f, short_description: e.target.value }))}
                 />
               </Field>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
-              <Field label="Texto do botão">
-                <Input
-                  value={form.action_button_text}
-                  onChange={(e) => setForm((f) => ({ ...f, action_button_text: e.target.value }))}
-                  placeholder="Comprar Agora"
-                />
-              </Field>
-              <Field label="Cor do botão">
-                <div className="flex gap-2">
+            <div className="space-y-3">
+              <h3 className="text-sm font-semibold text-foreground">Stock</h3>
+              <div className="grid grid-cols-2 gap-3">
+                <Field label="Quantidade">
                   <Input
-                    type="color"
-                    className="h-9 w-12 p-1"
-                    value={form.action_button_color}
-                    onChange={(e) => setForm((f) => ({ ...f, action_button_color: e.target.value }))}
+                    inputMode="numeric"
+                    value={form.stock}
+                    onChange={(e) => setForm((f) => ({ ...f, stock: e.target.value }))}
                   />
-                  <Input
-                    value={form.action_button_color}
-                    onChange={(e) => setForm((f) => ({ ...f, action_button_color: e.target.value }))}
-                    placeholder="#0D9488"
-                  />
-                </div>
-              </Field>
-            </div>
-
-            <div className="grid grid-cols-3 gap-3">
-              <Field label="Minutos do Cron.">
-                <Input
-                  inputMode="numeric"
-                  value={form.timer_minutes}
-                  onChange={(e) => setForm((f) => ({ ...f, timer_minutes: e.target.value }))}
-                />
-              </Field>
-              <Field label="Segundos do Cron.">
-                <Input
-                  inputMode="numeric"
-                  value={form.timer_seconds}
-                  onChange={(e) => setForm((f) => ({ ...f, timer_seconds: e.target.value }))}
-                />
-              </Field>
-              <Field label="Cor do Cron.">
-                <div className="flex gap-2">
-                  <Input
-                    type="color"
-                    className="h-9 w-full p-1"
-                    value={form.timer_color}
-                    onChange={(e) => setForm((f) => ({ ...f, timer_color: e.target.value }))}
-                  />
-                </div>
-              </Field>
-            </div>
-
-
-            <div className="space-y-1.5">
-              <Label className="text-xs">Imagem do produto</Label>
-              <div className="flex flex-col gap-2">
-                {form.image_url ? (
-                  <div className="relative aspect-video w-full overflow-hidden rounded-lg border border-border">
-                    <img
-                      src={form.image_url}
-                      alt="Preview"
-                      className="h-full w-full object-cover"
-                    />
-                    <Button
-                      type="button"
-                      size="icon"
-                      variant="destructive"
-                      className="absolute top-2 right-2 size-8"
-                      onClick={() => setForm((f) => ({ ...f, image_url: "" }))}
-                    >
-                      <Trash2 className="size-4" />
-                    </Button>
-                  </div>
-                ) : (
-                  <div className="flex flex-col gap-2">
-                    <Input
-                      type="file"
-                      accept="image/*"
-                      onChange={async (e) => {
-                        const file = e.target.files?.[0];
-                        if (!file) return;
-
-                        try {
-                          const fileExt = file.name.split(".").pop();
-                          const fileName = `${Math.random().toString(36).slice(2)}.${fileExt}`;
-                          const filePath = `${fileName}`;
-
-                          const { error: uploadError, data } = await supabase.storage
-                            .from("product-images")
-                            .upload(filePath, file);
-
-                          if (uploadError) throw uploadError;
-
-                          const { data: { publicUrl } } = supabase.storage
-                            .from("product-images")
-                            .getPublicUrl(data.path);
-
-                          setForm((f) => ({ ...f, image_url: publicUrl }));
-                          toast.success("Imagem carregada com sucesso.");
-                        } catch (err: any) {
-                          toast.error(`Erro ao carregar imagem: ${err.message}`);
-                        }
-                      }}
-                    />
-                  </div>
-                )}
+                </Field>
               </div>
+              {/* TODO: Add more stock config fields: Show stock warning, urgency message, continue selling */}
             </div>
 
-            <Field label="Cidades atendidas (separadas por vírgula)">
-              <Input
-                value={form.cities}
-                onChange={(e) => setForm((f) => ({ ...f, cities: e.target.value }))}
+            <div className="space-y-3">
+              <h3 className="text-sm font-semibold text-foreground">Depoimentos</h3>
+              {/* TODO: Add Testimonial manager */}
+            </div>
+          </div>
                 placeholder="Maputo, Matola, Beira"
               />
             </Field>
