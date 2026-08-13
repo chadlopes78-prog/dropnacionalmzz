@@ -223,7 +223,7 @@ function ProductsPage() {
   function copyLink(slug: string) {
     const url = `${window.location.origin}/checkout/${slug}`;
     void navigator.clipboard.writeText(url);
-    toast.success("Link de checkout copiado.");
+    toast.success("Link copiado!");
   }
 
   return (
