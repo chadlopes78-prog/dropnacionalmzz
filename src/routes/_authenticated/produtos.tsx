@@ -43,6 +43,13 @@ export const Route = createFileRoute("/_authenticated/produtos")({
   component: ProductsPage,
 });
 
+interface Testimonial {
+  image_url: string;
+  name: string;
+  city: string;
+  text: string;
+}
+
 interface FormState {
   name: string;
   slug: string;
@@ -62,9 +69,14 @@ interface FormState {
   timer_minutes: string;
   timer_seconds: string;
   timer_color: string;
+  // Novas configurações
+  show_stock_warning: boolean;
+  stock_urgency_message: string;
+  continue_selling_no_stock: boolean;
+  show_recent_activity: boolean;
+  recent_activity_frequency: string;
+  testimonials: Testimonial[];
 }
-
-
 
 const EMPTY_FORM: FormState = {
   name: "",
@@ -85,8 +97,13 @@ const EMPTY_FORM: FormState = {
   timer_minutes: "10",
   timer_seconds: "0",
   timer_color: "#ef4444",
+  show_stock_warning: false,
+  stock_urgency_message: "A previsão é que o stock termine ainda hoje.",
+  continue_selling_no_stock: false,
+  show_recent_activity: false,
+  recent_activity_frequency: "30",
+  testimonials: [],
 };
-
 
 function toForm(p: Product): FormState {
   return {
@@ -108,6 +125,12 @@ function toForm(p: Product): FormState {
     timer_minutes: String((p as any).timer_minutes ?? 10),
     timer_seconds: String((p as any).timer_seconds ?? 0),
     timer_color: (p as any).timer_color ?? "#ef4444",
+    show_stock_warning: (p as any).show_stock_warning ?? false,
+    stock_urgency_message: (p as any).stock_urgency_message ?? "A previsão é que o stock termine ainda hoje.",
+    continue_selling_no_stock: (p as any).continue_selling_no_stock ?? false,
+    show_recent_activity: (p as any).show_recent_activity ?? false,
+    recent_activity_frequency: String((p as any).recent_activity_frequency ?? 30),
+    testimonials: (p as any).testimonials ?? [],
   };
 }
 
