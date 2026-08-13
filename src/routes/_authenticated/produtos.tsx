@@ -25,6 +25,7 @@ import { useProducts, type Product } from "@/hooks/useOrders";
 import { canSeeCosts, useMyRoles } from "@/hooks/useRoles";
 
 import { PROVINCES, formatMT, slugify } from "@/lib/domain";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/produtos")({
   head: () => ({
