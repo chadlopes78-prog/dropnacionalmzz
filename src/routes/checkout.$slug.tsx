@@ -225,9 +225,9 @@ function CheckoutPage() {
 
             <div className="rounded-lg border border-primary/25 bg-primary/8 p-3">
               <p className="flex items-center gap-2 text-sm font-semibold text-primary">
-                <ShieldCheck className="size-4" aria-hidden /> PAGAMENTO NA ENTREGA
+                <ShieldCheck className="size-4" aria-hidden /> PAGAMENTO SOMENTE AO RECEBER O PRODUTO
               </p>
-              <p className="mt-1 text-sm text-foreground">Só paga quando receber o produto.</p>
+              <p className="mt-1 text-sm text-foreground">Receba em casa e pague apenas no ato da entrega.</p>
             </div>
 
             {/* Aviso de Stock */}
