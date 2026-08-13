@@ -1,11 +1,11 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { CheckCircle2, ShieldCheck } from "lucide-react";
+import { CheckCircle2, ShieldCheck, Phone, Package, Truck, Info } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { formatMT } from "@/lib/domain";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+
 
 export const Route = createFileRoute("/encomenda/$id")({
   head: () => ({
