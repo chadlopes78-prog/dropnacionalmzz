@@ -181,6 +181,9 @@ export type Database = {
           short_description: string | null
           slug: string
           stock: number
+          timer_color: string | null
+          timer_minutes: number | null
+          timer_seconds: number | null
           updated_at: string
         }
         Insert: {
@@ -202,6 +205,9 @@ export type Database = {
           short_description?: string | null
           slug: string
           stock?: number
+          timer_color?: string | null
+          timer_minutes?: number | null
+          timer_seconds?: number | null
           updated_at?: string
         }
         Update: {
@@ -223,6 +229,9 @@ export type Database = {
           short_description?: string | null
           slug?: string
           stock?: number
+          timer_color?: string | null
+          timer_minutes?: number | null
+          timer_seconds?: number | null
           updated_at?: string
         }
         Relationships: []
