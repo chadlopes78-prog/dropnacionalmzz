@@ -524,24 +524,24 @@ function RecentActivity({ product }: { product: any }) {
     if (!product.show_recent_activity) return;
 
     const showNewActivity = () => {
-      const name = COMMON_NAMES[Math.floor(Math.random() * COMMON_NAMES.length)];
+      const name = COMMON_NAMES[Math.floor(Math.random() * COMMON_NAMES.length)] || "Cliente";
       
       // Lógica de cidades permitidas
       let city = "Moçambique";
-      const productCities = product.cities || [];
-      const productProvinces = product.provinces || [];
+      const productCities = Array.isArray(product.cities) ? product.cities : [];
+      const productProvinces = Array.isArray(product.provinces) ? product.provinces : [];
       
       if (productCities.length > 0) {
-        city = productCities[Math.floor(Math.random() * productCities.length)];
+        city = String(productCities[Math.floor(Math.random() * productCities.length)]);
       } else if (productProvinces.length > 0) {
-        city = productProvinces[Math.floor(Math.random() * productProvinces.length)];
+        city = String(productProvinces[Math.floor(Math.random() * productProvinces.length)]);
       } else {
         const allCities = ["Maputo", "Matola", "Beira", "Nampula", "Chimoio", "Tete", "Quelimane", "Pemba"];
-        city = allCities[Math.floor(Math.random() * allCities.length)];
+        city = allCities[Math.floor(Math.random() * allCities.length)] || "Moçambique";
       }
 
       const times = ["há poucos segundos", "acabou de encomendar", "há 2 minutos", "há 5 minutos"];
-      const time = times[Math.floor(Math.random() * times.length)];
+      const time = times[Math.floor(Math.random() * times.length)] || "recentemente";
 
       setActivity({ name, city, time });
       setVisible(true);
