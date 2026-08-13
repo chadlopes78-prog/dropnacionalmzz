@@ -93,8 +93,9 @@ export function OrderFilters({
   const set = (patch: Partial<FiltersState>) => onChange({ ...value, ...patch });
 
   return (
-    <div className="grid gap-2 md:grid-cols-3 lg:grid-cols-6">
-      <div className="relative md:col-span-2">
+    <div className="space-y-4">
+      {/* Barra de Pesquisa Principal */}
+      <div className="relative">
         <Search
           className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
           aria-hidden
@@ -102,95 +103,97 @@ export function OrderFilters({
         <Input
           value={value.search}
           onChange={(e) => set({ search: e.target.value })}
-          placeholder="Pesquisar nome, telefone, produto, cidade, bairro"
-          className="pl-9"
+          placeholder="Pesquisar contacto (nome, número, província, cidade, bairro, produto)"
+          className="h-11 pl-10"
         />
       </div>
 
-      <Select value={value.period} onValueChange={(v) => set({ period: v as PeriodFilter })}>
-        <SelectTrigger className="w-full">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="todos">Todo o período</SelectItem>
-          <SelectItem value="hoje">Hoje</SelectItem>
-          <SelectItem value="ontem">Ontem</SelectItem>
-          <SelectItem value="7dias">Últimos 7 dias</SelectItem>
-          <SelectItem value="30dias">Últimos 30 dias</SelectItem>
-        </SelectContent>
-      </Select>
+      {/* Filtros Rápidos (Chips) */}
+      <div className="flex flex-wrap gap-2">
+        {[
+          { label: "Todos", value: "todos" },
+          { label: "Novos", value: "por_ligar" }, // Usando o estado interno correspondente
+          { label: "Por ligar", value: "por_ligar" },
+          { label: "Não atende", value: "nao_atende" },
+          { label: "Reagendados", value: "agendada" },
+          { label: "Confirmados", value: "confirmada" },
+          { label: "Cancelados", value: "cancelada" },
+        ].map((s) => {
+          const isActive = value.status === s.value;
+          return (
+            <button
+              key={s.label + s.value}
+              onClick={() => set({ status: s.value })}
+              className={`rounded-full px-4 py-1.5 text-xs font-medium transition-all ${
+                isActive
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-muted text-muted-foreground hover:bg-muted/80"
+              }`}
+            >
+              {s.label}
+            </button>
+          );
+        })}
+      </div>
 
-      <Select value={value.product} onValueChange={(v) => set({ product: v })}>
-        <SelectTrigger className="w-full">
-          <SelectValue placeholder="Produto" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="todos">Todos os produtos</SelectItem>
-          {products.map((p) => (
-            <SelectItem key={p} value={p}>
-              {p}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-
-      <Select value={value.province} onValueChange={(v) => set({ province: v })}>
-        <SelectTrigger className="w-full">
-          <SelectValue placeholder="Província" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="todas">Todas as províncias</SelectItem>
-          {PROVINCES.map((p) => (
-            <SelectItem key={p} value={p}>
-              {p}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-
-      <Select value={value.city} onValueChange={(v) => set({ city: v })}>
-        <SelectTrigger className="w-full">
-          <SelectValue placeholder="Cidade" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="todas">Todas as cidades</SelectItem>
-          {cities.map((c) => (
-            <SelectItem key={c} value={c}>
-              {c}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-
-      {showStatus ? (
-        <Select value={value.status} onValueChange={(v) => set({ status: v })}>
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Estado" />
+      {/* Filtros Dropdown */}
+      <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+        <Select value={value.province} onValueChange={(v) => set({ province: v })}>
+          <SelectTrigger className="h-9">
+            <SelectValue placeholder="Província" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="todos">Todos os estados</SelectItem>
-            {STATUSES.map((s) => (
-              <SelectItem key={s.value} value={s.value}>
-                {s.label}
+            <SelectItem value="todas">Todas as províncias</SelectItem>
+            {PROVINCES.map((p) => (
+              <SelectItem key={p} value={p}>
+                {p}
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
-      ) : null}
 
-      <Select value={value.assignee} onValueChange={(v) => set({ assignee: v })}>
-        <SelectTrigger className="w-full">
-          <SelectValue placeholder="Responsável" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="todos">Todos os responsáveis</SelectItem>
-          {assignees.map((a) => (
-            <SelectItem key={a} value={a}>
-              {a}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+        <Select value={value.product} onValueChange={(v) => set({ product: v })}>
+          <SelectTrigger className="h-9">
+            <SelectValue placeholder="Produto" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="todos">Todos os produtos</SelectItem>
+            {products.map((p) => (
+              <SelectItem key={p} value={p}>
+                {p}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
+        <Select value={value.period} onValueChange={(v) => set({ period: v as PeriodFilter })}>
+          <SelectTrigger className="h-9">
+            <SelectValue placeholder="Data" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="todos">Todo o período</SelectItem>
+            <SelectItem value="hoje">Hoje</SelectItem>
+            <SelectItem value="ontem">Ontem</SelectItem>
+            <SelectItem value="7dias">Últimos 7 dias</SelectItem>
+            <SelectItem value="30dias">Últimos 30 dias</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <Select value={value.assignee} onValueChange={(v) => set({ assignee: v })}>
+          <SelectTrigger className="h-9">
+            <SelectValue placeholder="Responsável" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="todos">Todos os responsáveis</SelectItem>
+            {assignees.map((a) => (
+              <SelectItem key={a} value={a}>
+                {a}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
     </div>
+
   );
 }
