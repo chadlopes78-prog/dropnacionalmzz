@@ -420,12 +420,12 @@ function CheckoutPage() {
         </form>
 
         {/* Depoimentos */}
-        {product.testimonials && product.testimonials.length > 0 && (
+        {Array.isArray(product.testimonials) && product.testimonials.length > 0 && (
           <div className="mt-8 space-y-4">
             <h2 className="px-2 text-center text-lg font-bold text-foreground">
               Veja o que os nossos clientes dizem
             </h2>
-            <TestimonialsCarousel testimonials={product.testimonials} />
+            <TestimonialsCarousel testimonials={product.testimonials as any[]} />
           </div>
         )}
 
