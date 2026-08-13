@@ -401,13 +401,12 @@ function CheckoutPage() {
               <Row label="Produto" value={product.name} />
               <Row label="Quantidade" value={String(quantity)} />
               <Row label="Preço unitário" value={formatMT(unitPrice)} />
-              <Row label="Custo de entrega" value={formatMT(deliveryCost)} />
               <div className="mt-2 flex items-center justify-between border-t border-border pt-3 text-base font-semibold text-foreground">
                 <span>Total</span>
                 <span>{formatMT(total)}</span>
               </div>
-              <p className="mt-2 rounded-lg bg-primary/10 px-3 py-2 text-sm font-medium text-primary">
-                Pagamento: Na entrega
+              <p className="mt-2 rounded-lg bg-primary/10 px-3 py-2 text-sm font-medium text-primary text-center">
+                Pagamento: Somente ao receber o produto
               </p>
             </CardContent>
           </Card>
