@@ -40,7 +40,7 @@ function OrderReceipt() {
   });
 
   return (
-    <div className="min-h-screen bg-muted/40 px-4 py-8 pb-16">
+    <div className="min-h-screen bg-muted/40 px-4 py-8 pb-[max(4rem,calc(env(safe-area-inset-bottom)+4rem))] pt-[max(2rem,env(safe-area-inset-top))]">
       <div className="mx-auto max-w-lg space-y-6">
         {/* Topo - Sucesso */}
         <div className="text-center space-y-4">
