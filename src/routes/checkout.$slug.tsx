@@ -297,14 +297,6 @@ function CheckoutPage() {
                 />
               </Field>
 
-              <Field label="Ponto de referência">
-                <Textarea
-                  value={form.reference_point}
-                  onChange={(e) => set("reference_point", e.target.value)}
-                  placeholder="Próximo da Shoprite, escola, mercado, bomba, etc."
-                  rows={2}
-                />
-              </Field>
 
               <Field label="Quantidade">
                 <div className="flex items-center gap-3">
@@ -443,9 +435,10 @@ function CountdownTimer({ product }: { product: any }) {
 
   return (
     <div 
-      className="mb-4 flex items-center justify-center gap-2 rounded-lg border py-3 font-bold animate-pulse"
-      style={{ borderColor: `${color}40`, backgroundColor: `${color}10`, color: color }}
+      className="mb-4 flex items-center justify-center gap-2 rounded-lg border py-3 font-black shadow-md animate-pulse"
+      style={{ backgroundColor: color, borderColor: color, color: 'white' }}
     >
+
       <Timer className="size-5" />
       <span>PROMOÇÃO TERMINA EM:</span>
       <span className="tabular-nums">
