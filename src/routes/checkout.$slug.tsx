@@ -82,6 +82,10 @@ function CheckoutPage() {
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
   const [submitting, setSubmitting] = useState(false);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const { data: product, isLoading } = useQuery({
     queryKey: ["checkout-product", slug],
     queryFn: async () => {
