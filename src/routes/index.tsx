@@ -1,25 +1,21 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
-import { ShieldCheck, Truck, PhoneCall, Package } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
-import { formatMT } from "@/lib/domain";
+import { ShieldCheck, Truck, PhoneCall, Package, CheckCircle2, TrendingUp, Users, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Drop Nacional Moçambique | Encomende e pague na entrega" },
+      { title: "Drop Nacional Moçambique | A Maior Rede de Dropshipping" },
       {
         name: "description",
         content:
-          "Encomende produtos originais em Moçambique e pague somente quando receber. Entrega em todas as províncias com confirmação por telefone.",
+          "A plataforma líder para vender produtos físicos em Moçambique sem stock. Pagamento na entrega, logística integrada e confirmação humana.",
       },
-      { property: "og:title", content: "Drop Nacional Moçambique | Encomende e pague na entrega" },
+      { property: "og:title", content: "Drop Nacional Moçambique | A Maior Rede de Dropshipping" },
       {
         property: "og:description",
-        content: "Encomende produtos originais em Moçambique e pague somente quando receber. Entrega em todas as províncias com confirmação por telefone.",
+        content: "Venda produtos em Moçambique com risco zero. Logística completa com pagamento na entrega e confirmação por telefone.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -29,20 +25,6 @@ export const Route = createFileRoute("/")({
 });
 
 function StoreHome() {
-  const { data: products, isLoading } = useQuery({
-    queryKey: ["public-products"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("products")
-        // A loja pública não tem acesso a custos internos; pedimos só colunas comerciais.
-        .select("id, slug, name, image_url, gallery, short_description, price, promo_price, stock, delivery_cost, provinces, cities, delivery_time, active, created_at, action_button_text, action_button_color")
-        .eq("active", true)
-        .order("created_at", { ascending: false });
-      if (error) throw error;
-      return data ?? [];
-    },
-  });
-
   return (
     <div className="min-h-screen bg-background">
       {/* Dynamic Navigation */}
@@ -56,195 +38,232 @@ function StoreHome() {
               Drop<span className="text-primary">Nacional</span>
             </span>
           </div>
+          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-muted-foreground">
+            <a href="#como-funciona" className="transition-colors hover:text-primary">Como Funciona</a>
+            <a href="#beneficios" className="transition-colors hover:text-primary">Benefícios</a>
+            <a href="#estatisticas" className="transition-colors hover:text-primary">Estatísticas</a>
+          </div>
           <Link to="/auth">
-            <Button variant="ghost" size="sm" className="rounded-full font-medium transition-all hover:bg-secondary/80">
-              Área da Equipa
+            <Button size="sm" className="rounded-full font-bold shadow-lg shadow-primary/20 px-6">
+              Entrar na Plataforma
             </Button>
           </Link>
         </div>
       </header>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-background pt-16 pb-24 lg:pt-24 lg:pb-32">
-        <div className="absolute inset-0 -z-10 bg-[radial-gradient(45%_45%_at_50%_50%,var(--color-primary)_0%,transparent_100%)] opacity-[0.03]" />
+      <section className="relative overflow-hidden bg-background pt-20 pb-24 lg:pt-32 lg:pb-40">
+        <div className="absolute inset-0 -z-10 bg-[radial-gradient(45%_45%_at_50%_50%,var(--color-primary)_0%,transparent_100%)] opacity-[0.05]" />
         
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
+            <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm font-semibold text-primary animate-in fade-in slide-in-from-bottom-2 duration-500">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span>
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-primary"></span>
+              </span>
+              Líder em E-commerce Nacional
+            </div>
             
-            <h1 className="mx-auto max-w-4xl bg-gradient-to-b from-foreground to-foreground/70 bg-clip-text text-4xl font-extrabold tracking-tight text-transparent sm:text-6xl lg:text-7xl animate-in fade-in slide-in-from-bottom-4 duration-700 delay-100">
-              Os melhores produtos chegam até à sua porta
+            <h1 className="mx-auto mt-8 max-w-4xl bg-gradient-to-b from-foreground to-foreground/70 bg-clip-text text-5xl font-extrabold tracking-tight text-transparent sm:text-7xl lg:text-8xl animate-in fade-in slide-in-from-bottom-4 duration-700 delay-100 leading-[1.1]">
+              Venda em Moçambique com <span className="text-primary">Risco Zero</span>
             </h1>
             
-            <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground animate-in fade-in slide-in-from-bottom-5 duration-700 delay-200">
-              A maior rede de Drop Nacional em Moçambique. Encomende hoje e pague apenas quando o produto estiver nas suas mãos.
+            <p className="mx-auto mt-8 max-w-2xl text-xl text-muted-foreground animate-in fade-in slide-in-from-bottom-5 duration-700 delay-200">
+              A infraestrutura completa para o seu negócio de Drop Nacional. Nós tratamos da importação, confirmação e entrega. Você só precisa de vender.
             </p>
 
-            <div className="mt-10 flex flex-wrap justify-center gap-4 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-300">
-              <Button size="lg" className="h-12 rounded-full px-8 text-base font-semibold shadow-lg shadow-primary/20" onClick={() => document.getElementById('catalogo')?.scrollIntoView({ behavior: 'smooth' })}>
-                Ver Catálogo
+            <div className="mt-12 flex flex-col sm:flex-row justify-center gap-4 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-300">
+              <Link to="/auth">
+                <Button size="lg" className="h-14 w-full sm:w-auto rounded-full px-10 text-lg font-bold shadow-xl shadow-primary/20 transition-transform hover:scale-105 active:scale-95">
+                  Começar a Vender Agora
+                </Button>
+              </Link>
+              <Button size="lg" variant="outline" className="h-14 w-full sm:w-auto rounded-full px-10 text-lg font-bold border-2 transition-all hover:bg-secondary/50" onClick={() => document.getElementById('como-funciona')?.scrollIntoView({ behavior: 'smooth' })}>
+                Ver Como Funciona
               </Button>
-              <div className="flex items-center gap-2 rounded-full border border-border bg-card/50 px-5 py-2 text-sm font-medium backdrop-blur-sm">
-                <span className="flex h-2 w-2 rounded-full bg-green-500 animate-pulse" />
-                <span>+500 Encomendas esta semana</span>
-              </div>
             </div>
           </div>
+        </div>
+      </section>
 
-          {/* Value Props Grid */}
-          <div className="mt-20 grid gap-6 sm:grid-cols-3 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-400">
+      {/* Trust Stats Bar */}
+      <section id="estatisticas" className="border-y border-border/50 bg-card/30 py-12 backdrop-blur-sm">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
             {[
-              { 
-                icon: Package, 
-                title: "Pedido Rápido", 
-                desc: "Preencha os seus dados em menos de 1 minuto sem precisar de cartão." 
-              },
-              { 
-                icon: PhoneCall, 
-                title: "Confirmação Humana", 
-                desc: "A nossa equipa liga-lhe em instantes para validar e agendar a entrega." 
-              },
-              { 
-                icon: Truck, 
-                title: "Pague ao Receber", 
-                desc: "O risco é zero. Só paga quando o estafeta entregar o produto em mão." 
-              },
-            ].map(({ icon: Icon, title, desc }, idx) => (
-              <div
-                key={title}
-                className="group relative flex flex-col items-center rounded-3xl border border-border/50 bg-card/50 p-8 text-center transition-all hover:border-primary/30 hover:shadow-xl hover:shadow-primary/5 backdrop-blur-sm"
-              >
-                <div className="mb-5 flex size-14 items-center justify-center rounded-2xl bg-primary/10 text-primary transition-transform group-hover:scale-110">
-                  <Icon className="size-7" />
+              { label: "Encomendas Entregues", value: "+50.000", icon: CheckCircle2 },
+              { label: "Vendedores Ativos", value: "+1.200", icon: Users },
+              { label: "Cidades Cobertas", value: "Todas", icon: Globe },
+              { label: "Taxa de Sucesso", value: "94%", icon: TrendingUp },
+            ].map((stat, i) => (
+              <div key={i} className="flex flex-col items-center text-center">
+                <div className="mb-3 flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <stat.icon className="size-5" />
                 </div>
-                <h3 className="text-lg font-bold text-foreground">{title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{desc}</p>
+                <div className="text-2xl font-black text-foreground">{stat.value}</div>
+                <div className="text-xs font-medium uppercase tracking-wider text-muted-foreground">{stat.label}</div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Products Section */}
-      <section id="catalogo" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-        <div className="mb-12 flex items-end justify-between border-b border-border/50 pb-8">
-          <div>
-            <h2 className="text-3xl font-bold tracking-tight text-foreground">Destaques da Semana</h2>
-            <p className="mt-2 text-muted-foreground text-lg">Produtos verificados com entrega imediata em todas as províncias.</p>
+      {/* How it Works Section */}
+      <section id="como-funciona" className="py-24 lg:py-32">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h2 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-5xl">Simples, Rápido e Eficiente</h2>
+            <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
+              O ecossistema perfeito para escalar o seu negócio de vendas online em Moçambique.
+            </p>
+          </div>
+
+          <div className="mt-20 grid gap-12 lg:grid-cols-3">
+            {[
+              {
+                step: "01",
+                title: "Escolha o Produto",
+                desc: "Aceda ao nosso catálogo de produtos vencedores já testados no mercado nacional com stock local.",
+                icon: Package
+              },
+              {
+                step: "02",
+                title: "Venda Online",
+                desc: "Use os nossos links de checkout otimizados para converter no Facebook, Instagram ou TikTok.",
+                icon: PhoneCall
+              },
+              {
+                step: "03",
+                title: "Nós Entregamos",
+                desc: "A nossa equipa confirma a encomenda por telefone e entrega ao cliente. Você recebe o seu lucro.",
+                icon: Truck
+              }
+            ].map((item, i) => (
+              <div key={i} className="relative group">
+                <div className="mb-8 flex size-20 items-center justify-center rounded-3xl bg-primary/10 text-primary transition-all duration-300 group-hover:bg-primary group-hover:text-primary-foreground">
+                  <item.icon className="size-10" />
+                  <span className="absolute -top-4 -right-4 text-4xl font-black text-foreground/5">{item.step}</span>
+                </div>
+                <h3 className="text-2xl font-bold text-foreground">{item.title}</h3>
+                <p className="mt-4 text-lg leading-relaxed text-muted-foreground">{item.desc}</p>
+              </div>
+            ))}
           </div>
         </div>
+      </section>
 
-        {isLoading ? (
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {[0, 1, 2, 3].map((i) => (
-              <div key={i} className="space-y-4">
-                <Skeleton className="aspect-square w-full rounded-2xl" />
-                <Skeleton className="h-4 w-2/3" />
-                <Skeleton className="h-4 w-1/2" />
-                <Skeleton className="h-10 w-full rounded-xl" />
+      {/* Benefits Section */}
+      <section id="beneficios" className="relative bg-card/50 py-24 lg:py-32 backdrop-blur-sm overflow-hidden">
+        <div className="absolute top-0 right-0 -z-10 size-[500px] rounded-full bg-primary/5 blur-[120px]" />
+        
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-16 lg:grid-cols-2 lg:items-center">
+            <div>
+              <h2 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-5xl">Porquê escolher o Drop Nacional?</h2>
+              <div className="mt-10 space-y-8">
+                {[
+                  {
+                    title: "Pagamento na Entrega",
+                    desc: "Aumente as suas vendas em 300%. Em Moçambique, a confiança está no pagamento físico."
+                  },
+                  {
+                    title: "Logística Própria",
+                    desc: "Estafetas em todas as capitais provinciais garantindo entregas rápidas e seguras."
+                  },
+                  {
+                    title: "Call Center Dedicado",
+                    desc: "Confirmamos cada pedido para garantir que não perde dinheiro com devoluções."
+                  }
+                ].map((benefit, i) => (
+                  <div key={i} className="flex gap-6">
+                    <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                      <CheckCircle2 className="size-5" />
+                    </div>
+                    <div>
+                      <h4 className="text-xl font-bold text-foreground">{benefit.title}</h4>
+                      <p className="mt-2 text-muted-foreground leading-relaxed">{benefit.desc}</p>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        ) : !products?.length ? (
-          <Card className="border-dashed bg-muted/30">
-            <CardContent className="flex flex-col items-center py-20 text-center">
-              <Package className="mb-4 size-12 text-muted-foreground/50" />
-              <h3 className="text-lg font-medium">Sem produtos disponíveis</h3>
-              <p className="mt-1 text-sm text-muted-foreground">Estamos a repor o stock. Volte em breve!</p>
-            </CardContent>
-          </Card>
-        ) : (
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {products.map((p) => (
-              <div 
-                key={p.id} 
-                className="group relative flex flex-col overflow-hidden rounded-3xl border border-border/50 bg-card transition-all hover:border-primary/20 hover:shadow-2xl hover:shadow-primary/5"
-              >
-                <div className="relative aspect-square overflow-hidden bg-muted">
-                  {p.image_url ? (
-                    <img
-                      src={p.image_url}
-                      alt={p.name}
-                      loading="lazy"
-                      className="size-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    />
-                  ) : (
-                    <div className="flex size-full items-center justify-center text-muted-foreground">
-                      <Package className="size-12 opacity-20" />
-                    </div>
-                  )}
-                  {p.promo_price && (
-                    <div className="absolute top-4 left-4 rounded-full bg-primary px-3 py-1 text-xs font-bold text-primary-foreground shadow-lg">
-                      OFERTA
-                    </div>
-                  )}
-                  <div className="absolute top-4 right-4 rounded-full bg-background/80 px-3 py-1 text-[10px] font-bold tracking-wider text-foreground backdrop-blur-md">
-                    ENTREGA GRÁTIS
+            </div>
+            
+            <div className="relative rounded-3xl border border-border/50 bg-background/50 p-8 shadow-2xl backdrop-blur-md">
+              <div className="space-y-6">
+                <div className="flex items-center gap-4 rounded-2xl bg-primary/5 p-4 border border-primary/10">
+                  <div className="size-12 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">12k</div>
+                  <div>
+                    <div className="text-sm font-bold">Vendas este mês</div>
+                    <div className="text-xs text-muted-foreground">+24% em relação ao mês anterior</div>
                   </div>
                 </div>
-
-                <div className="flex flex-1 flex-col p-6">
-                  <div className="mb-2 flex flex-1 flex-col">
-                    <h3 className="text-lg font-bold leading-tight text-foreground line-clamp-2">
-                      {p.name}
-                    </h3>
-                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground line-clamp-2">
-                      {p.short_description}
-                    </p>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="rounded-2xl bg-card p-4 border border-border/50">
+                    <div className="text-xs font-medium text-muted-foreground uppercase">Lucro Gerado</div>
+                    <div className="text-xl font-black mt-1 text-primary">850.000 MT</div>
                   </div>
-                  
-                  <div className="mt-4 flex items-center justify-between border-t border-border/50 pt-4">
-                    <div className="flex flex-col">
-                      {p.promo_price && (
-                        <span className="text-xs text-muted-foreground line-through decoration-primary/50">
-                          {formatMT(p.price)}
-                        </span>
-                      )}
-                      <span className="text-xl font-black text-primary">
-                        {formatMT(p.promo_price ?? p.price)}
-                      </span>
-                    </div>
-                    <Link to="/checkout/$slug" params={{ slug: p.slug }}>
-                      <Button 
-                        size="sm" 
-                        className="rounded-full px-5 font-bold shadow-lg shadow-primary/10 transition-transform active:scale-95"
-                        style={{
-                          backgroundColor: (p as any).action_button_color || "#0D9488",
-                          color: "white"
-                        }}
-                      >
-                        {(p as any).action_button_text || "Encomendar"}
-                      </Button>
-
-                    </Link>
+                  <div className="rounded-2xl bg-card p-4 border border-border/50">
+                    <div className="text-xs font-medium text-muted-foreground uppercase">Eficiência</div>
+                    <div className="text-xl font-black mt-1 text-primary">98.2%</div>
                   </div>
                 </div>
+                <div className="pt-4">
+                   <Link to="/auth">
+                    <Button className="w-full h-12 rounded-xl font-bold">Criar Minha Conta Grátis</Button>
+                   </Link>
+                </div>
               </div>
-            ))}
+            </div>
           </div>
-        )}
+        </div>
       </section>
 
       {/* Footer */}
-      <footer className="mt-20 border-t border-border/50 bg-card/30 py-12 backdrop-blur-sm pb-[max(3rem,calc(env(safe-area-inset-bottom)+3rem))]">
-        <div className="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
-          <div className="flex items-center justify-center gap-2">
-            <div className="flex size-7 items-center justify-center rounded-lg bg-primary/20">
-              <Package className="size-4 text-primary" />
+      <footer className="border-t border-border/50 bg-card/30 py-20 backdrop-blur-sm pb-[max(3rem,calc(env(safe-area-inset-bottom)+3rem))]">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-12 md:grid-cols-4">
+            <div className="md:col-span-2">
+              <div className="flex items-center gap-2">
+                <div className="flex size-9 items-center justify-center rounded-xl bg-primary shadow-sm shadow-primary/20">
+                  <Package className="size-5 text-primary-foreground" />
+                </div>
+                <span className="text-xl font-bold tracking-tight text-foreground">
+                  Drop<span className="text-primary">Nacional</span>
+                </span>
+              </div>
+              <p className="mt-6 max-w-sm text-lg text-muted-foreground leading-relaxed">
+                A revolucionar o comércio eletrónico em Moçambique através da melhor rede de logística e confiança.
+              </p>
             </div>
-            <span className="font-bold text-foreground">DropNacional</span>
+            
+            <div>
+              <h4 className="text-sm font-bold uppercase tracking-wider text-foreground">Plataforma</h4>
+              <ul className="mt-6 space-y-4 text-sm text-muted-foreground">
+                <li><a href="#como-funciona" className="transition-colors hover:text-primary">Como Funciona</a></li>
+                <li><a href="#beneficios" className="transition-colors hover:text-primary">Benefícios</a></li>
+                <li><Link to="/auth" className="transition-colors hover:text-primary">Área de Lojista</Link></li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 className="text-sm font-bold uppercase tracking-wider text-foreground">Suporte</h4>
+              <ul className="mt-6 space-y-4 text-sm text-muted-foreground">
+                <li><a href="#" className="transition-colors hover:text-primary">Termos de Uso</a></li>
+                <li><a href="#" className="transition-colors hover:text-primary">Privacidade</a></li>
+                <li><a href="#" className="transition-colors hover:text-primary">Contactos</a></li>
+              </ul>
+            </div>
           </div>
-          <p className="mt-4 text-sm text-muted-foreground">
-            © {new Date().getFullYear()} Drop Nacional Moçambique. Todos os direitos reservados.
-          </p>
-          <div className="mt-6 flex justify-center gap-8">
-            {["Termos", "Privacidade", "Contactos"].map((link) => (
-              <a key={link} href="#" className="text-xs font-medium text-muted-foreground transition-colors hover:text-primary">
-                {link}
-              </a>
-            ))}
+          
+          <div className="mt-20 border-t border-border/50 pt-8 text-center">
+            <p className="text-sm text-muted-foreground">
+              © {new Date().getFullYear()} Drop Nacional Moçambique. Todos os direitos reservados.
+            </p>
           </div>
         </div>
       </footer>
     </div>
   );
 }
+
