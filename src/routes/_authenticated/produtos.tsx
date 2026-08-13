@@ -405,16 +405,6 @@ function ProductsPage() {
                         }
                       }}
                     />
-                    <div className="flex items-center gap-2">
-                      <div className="h-px flex-1 bg-border" />
-                      <span className="text-[10px] text-muted-foreground uppercase">Ou URL externa</span>
-                      <div className="h-px flex-1 bg-border" />
-                    </div>
-                    <Input
-                      value={form.image_url}
-                      onChange={(e) => setForm((f) => ({ ...f, image_url: e.target.value }))}
-                      placeholder="https://..."
-                    />
                   </div>
                 )}
               </div>
