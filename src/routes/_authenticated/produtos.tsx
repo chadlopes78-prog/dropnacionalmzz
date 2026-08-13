@@ -248,82 +248,108 @@ function ProductsPage() {
           </CardContent>
         </Card>
       ) : (
-        <div className="grid gap-3 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
           {list.map((p) => (
-            <Card key={p.id}>
-              <CardContent className="space-y-3">
-                <div className="flex items-start justify-between gap-2">
-                  <div className="min-w-0">
-                    <h3 className="truncate font-semibold text-foreground">{p.name}</h3>
-                    <p className="text-xs text-muted-foreground">/checkout/{p.slug}</p>
-                  </div>
-                  <Badge variant={p.active ? "default" : "secondary"}>
-                    {p.active ? "Activo" : "Inactivo"}
-                  </Badge>
-                </div>
-
+            <Card key={p.id} className="group overflow-hidden border-border/40 transition-all hover:shadow-md dark:hover:bg-accent/5">
+              <div className="relative aspect-video w-full overflow-hidden bg-muted">
                 {p.image_url ? (
                   <img
                     src={p.image_url}
-                    alt={`Fotografia do produto ${p.name}`}
+                    alt={p.name}
                     loading="lazy"
-                    className="h-32 w-full rounded-lg object-cover"
+                    className="size-full object-cover transition-transform group-hover:scale-105"
                   />
-                ) : null}
-
-                <div className="grid grid-cols-2 gap-y-1 text-sm">
-                  <span className="text-muted-foreground">Preço</span>
-                  <span className="text-right font-medium">
-                    {p.promo_price ? (
-                      <>
-                        <s className="text-muted-foreground">{formatMT(p.price)}</s>{" "}
-                        {formatMT(p.promo_price)}
-                      </>
-                    ) : (
-                      formatMT(p.price)
-                    )}
-                  </span>
-                  {showCosts ? (
-                    <>
-                      <span className="text-muted-foreground">Custo</span>
-                      <span className="text-right">{formatMT(p.product_cost)}</span>
-                      <span className="text-muted-foreground">Entrega</span>
-                      <span className="text-right">{formatMT(p.delivery_cost)}</span>
-                      <span className="text-muted-foreground">Margem</span>
-                      <span
-                        className={`text-right font-semibold ${margin(p) >= 0 ? "text-status-ok" : "text-status-danger"}`}
-                      >
-                        {formatMT(margin(p))}
-                      </span>
-                    </>
-                  ) : null}
-
-                  <span className="text-muted-foreground">Stock</span>
-                  <span className="text-right">{p.stock}</span>
+                ) : (
+                  <div className="flex size-full items-center justify-center text-muted-foreground">
+                    Sem imagem
+                  </div>
+                )}
+                <div className="absolute right-2 top-2 flex gap-1">
+                  <Badge variant={p.active ? "default" : "secondary"} className="shadow-sm">
+                    {p.active ? "Activo" : "Inactivo"}
+                  </Badge>
+                </div>
+              </div>
+              
+              <CardContent className="p-4">
+                <div className="mb-3 space-y-1">
+                  <h3 className="line-clamp-1 font-bold text-foreground">{p.name}</h3>
+                  <p className="truncate text-[10px] font-mono text-muted-foreground">
+                    /checkout/{p.slug}
+                  </p>
                 </div>
 
-                <div className="flex flex-wrap gap-2">
-                  <Button size="sm" variant="secondary" onClick={() => copyLink(p.slug)}>
-                    <Copy className="size-4" /> Link
+                <div className="mb-4 grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
+                  <div className="space-y-0.5">
+                    <span className="text-[10px] uppercase tracking-wider text-muted-foreground">Venda</span>
+                    <p className="font-bold text-foreground">
+                      {p.promo_price ? (
+                        <span className="flex flex-col">
+                          <s className="text-[9px] text-muted-foreground/60">{formatMT(p.price)}</s>
+                          <span className="text-primary">{formatMT(p.promo_price)}</span>
+                        </span>
+                      ) : (
+                        formatMT(p.price)
+                      )}
+                    </p>
+                  </div>
+                  <div className="space-y-0.5 text-right">
+                    <span className="text-[10px] uppercase tracking-wider text-muted-foreground">Stock</span>
+                    <p className={cn(
+                      "font-bold",
+                      Number(p.stock) <= 5 ? "text-status-danger" : "text-foreground"
+                    )}>
+                      {p.stock} un.
+                    </p>
+                  </div>
+
+                  {showCosts && (
+                    <div className="col-span-2 mt-1 border-t border-border/40 pt-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] uppercase tracking-wider text-muted-foreground">Lucro Líquido</span>
+                        <span className={cn(
+                          "font-black",
+                          margin(p) >= 0 ? "text-status-ok" : "text-status-danger"
+                        )}>
+                          {formatMT(margin(p))}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex items-center gap-1">
+                  <Button 
+                    variant="secondary" 
+                    size="sm" 
+                    className="h-8 flex-1 text-[11px] font-bold"
+                    onClick={() => copyLink(p.slug)}
+                  >
+                    <Copy className="mr-1 size-3" /> Link
                   </Button>
                   <Button
-                    size="sm"
                     variant="outline"
+                    size="sm"
+                    className="h-8 flex-1 text-[11px] font-bold"
                     onClick={() => {
                       setEditing(p);
                       setForm(toForm(p));
                       setOpen(true);
                     }}
                   >
-                    <Pencil className="size-4" /> Editar
+                    <Pencil className="mr-1 size-3" /> Editar
                   </Button>
                   <Button
-                    size="sm"
                     variant="ghost"
-                    className="text-status-danger"
-                    onClick={() => remove.mutate(p.id)}
+                    size="icon"
+                    className="h-8 w-8 text-status-danger hover:bg-status-danger/10 hover:text-status-danger"
+                    onClick={() => {
+                      if (confirm("Deseja eliminar este produto?")) {
+                        remove.mutate(p.id);
+                      }
+                    }}
                   >
-                    <Trash2 className="size-4" /> Eliminar
+                    <Trash2 className="size-4" />
                   </Button>
                 </div>
               </CardContent>
