@@ -1,11 +1,11 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { CheckCircle2, ShieldCheck } from "lucide-react";
+import { CheckCircle2, ShieldCheck, Phone, Package, Truck, Info } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { formatMT } from "@/lib/domain";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+
 
 export const Route = createFileRoute("/encomenda/$id")({
   head: () => ({
@@ -40,53 +40,131 @@ function OrderReceipt() {
   });
 
   return (
-    <div className="min-h-screen bg-muted/40 px-4 py-8">
-      <div className="mx-auto max-w-lg">
-        <div className="text-center">
-          <CheckCircle2 className="mx-auto size-12 text-primary" aria-hidden />
-          <h1 className="mt-3 text-xl font-semibold text-foreground">
-            Encomenda recebida com sucesso ✅
+    <div className="min-h-screen bg-muted/40 px-4 py-8 pb-16">
+      <div className="mx-auto max-w-lg space-y-6">
+        {/* Topo - Sucesso */}
+        <div className="text-center space-y-4">
+          <div className="mx-auto flex size-20 items-center justify-center rounded-full bg-primary/10">
+            <CheckCircle2 className="size-10 text-primary animate-in zoom-in duration-500" aria-hidden />
+          </div>
+          <h1 className="text-2xl font-black text-foreground leading-tight px-4">
+            Parabéns! A sua encomenda foi recebida com sucesso 🎉
           </h1>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Obrigado pela sua encomenda. A nossa equipa irá entrar em contacto consigo através do
-            número informado para confirmar os dados e combinar a entrega.
+          <div className="space-y-3 text-sm text-muted-foreground px-2">
+            <p className="font-medium text-foreground">
+              Já recebemos os seus dados e a sua encomenda foi registada.
+            </p>
+            <p>
+              A nossa equipa vai entrar em contacto consigo dentro de alguns minutos ou nas próximas horas para confirmar a sua encomenda e combinar todos os detalhes da entrega.
+            </p>
+          </div>
+        </div>
+
+        {/* Aviso Chamada */}
+        <div className="rounded-xl border-2 border-primary/20 bg-primary/5 p-4 space-y-2">
+          <p className="flex items-center gap-2 font-bold text-primary">
+            <Phone className="size-4" /> Fique atento ao seu telefone
+          </p>
+          <p className="text-sm text-foreground/80 leading-relaxed">
+            Vamos ligar para o número que informou no momento da encomenda. Por favor, mantenha o telefone disponível para conseguirmos confirmar a sua encomenda.
           </p>
         </div>
 
-        <Card className="mt-6">
-          <CardContent className="space-y-2 pt-6 text-sm">
-            {isLoading ? (
-              <Skeleton className="h-40 w-full" />
-            ) : !order ? (
-              <p className="text-center text-muted-foreground">Encomenda não encontrada.</p>
-            ) : (
-              <>
-                <Row label="Nº da encomenda" value={`#${order.order_number}`} />
-                <Row label="Produto" value={order.product_name} />
-                <Row label="Quantidade" value={String(order.quantity)} />
-                <Row label="Entrega" value={formatMT(order.delivery_cost)} />
-                <div className="flex items-center justify-between border-t border-border pt-3 text-base font-semibold text-foreground">
-                  <span>Total</span>
-                  <span>{formatMT(order.total)}</span>
-                </div>
-                <Row
-                  label="Localização"
-                  value={`${order.neighborhood}, ${order.city} — ${order.province}`}
-                />
-                <Row label="Telefone" value={`+258 ${order.phone}`} />
-                <p className="mt-3 flex items-center gap-2 rounded-lg bg-primary/10 px-3 py-2 font-medium text-primary">
-                  <ShieldCheck className="size-4" aria-hidden /> Pagamento somente na entrega.
-                </p>
-              </>
-            )}
-          </CardContent>
-        </Card>
+        {/* Resumo da Encomenda */}
+        <div className="space-y-3">
+          <h2 className="px-1 text-sm font-bold uppercase tracking-wider text-muted-foreground">
+            Resumo da sua encomenda
+          </h2>
+          <Card className="border-none shadow-sm">
+            <CardContent className="space-y-2.5 pt-6 text-sm">
+              {isLoading ? (
+                <Skeleton className="h-48 w-full" />
+              ) : !order ? (
+                <p className="py-4 text-center text-muted-foreground">Encomenda não encontrada.</p>
+              ) : (
+                <>
+                  <Row label="Produto" value={order.product_name} />
+                  <Row label="Quantidade" value={String(order.quantity)} />
+                  <div className="flex items-center justify-between border-y border-border/50 py-3 my-1 text-base font-bold text-foreground">
+                    <span>Total</span>
+                    <span className="text-primary">{formatMT(order.total)}</span>
+                  </div>
+                  <Row label="Nome" value={order.customer_name} />
+                  <Row label="Telefone" value={order.phone} />
+                  <Row label="Província" value={order.province} />
+                  <Row label="Cidade/Distrito" value={order.city} />
+                  <Row label="Bairro" value={order.neighborhood} />
+                </>
+              )}
+            </CardContent>
+          </Card>
+        </div>
 
-        <Link to="/" className="mt-4 block">
-          <Button variant="outline" className="w-full">
-            Voltar à loja
-          </Button>
-        </Link>
+        {/* Pagamento */}
+        <div className="rounded-xl border-2 border-status-ok/20 bg-status-ok/5 p-4 space-y-2">
+          <p className="flex items-center gap-2 font-bold text-status-ok">
+            💵 Pagamento na entrega
+          </p>
+          <p className="text-sm text-foreground/80">
+            Não precisa pagar nada agora. O pagamento será feito somente quando receber a sua encomenda.
+          </p>
+        </div>
+
+        {/* Próximos Passos */}
+        <div className="space-y-4 pt-2">
+          <h2 className="px-1 text-sm font-bold uppercase tracking-wider text-muted-foreground">
+            O que acontece agora?
+          </h2>
+          <div className="space-y-4">
+            <Step 
+              number="1" 
+              title="Encomenda recebida ✓" 
+              desc="Os seus dados já foram enviados para a nossa equipa." 
+            />
+            <Step 
+              number="2" 
+              icon={<Phone className="size-3.5" />} 
+              title="Confirmação por telefone" 
+              desc="Vamos entrar em contacto consigo dentro de alguns minutos ou nas próximas horas." 
+            />
+            <Step 
+              number="3" 
+              icon={<Package className="size-3.5" />} 
+              title="Preparação da encomenda" 
+              desc="Depois da confirmação, a sua encomenda será preparada." 
+            />
+            <Step 
+              number="4" 
+              icon={<Truck className="size-3.5" />} 
+              title="Entrega" 
+              desc="Recebe a encomenda no local combinado e faz o pagamento no momento da entrega." 
+            />
+          </div>
+        </div>
+
+        {/* Aviso Importante Final */}
+        <div className="pt-6 space-y-2 text-center border-t border-border/50">
+          <p className="flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
+            <Info className="size-3" /> Importante
+          </p>
+          <p className="text-sm text-muted-foreground px-4 italic">
+            A confirmação por telefone é necessária para avançarmos com a sua encomenda. Fique atento às nossas chamadas.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Step({ number, title, desc, icon }: { number: string, title: string, desc: string, icon?: React.ReactNode }) {
+  return (
+    <div className="flex gap-4">
+      <div className="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary text-[10px] font-black text-primary-foreground">
+        {icon || number}
+      </div>
+      <div className="space-y-1">
+        <h3 className="text-sm font-bold text-foreground">{title}</h3>
+        <p className="text-xs text-muted-foreground leading-relaxed">{desc}</p>
       </div>
     </div>
   );
@@ -94,9 +172,10 @@ function OrderReceipt() {
 
 function Row({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-start justify-between gap-3">
-      <span className="text-muted-foreground">{label}</span>
-      <span className="text-right font-medium text-foreground">{value}</span>
+    <div className="flex items-start justify-between gap-3 py-0.5">
+      <span className="text-muted-foreground">{label}:</span>
+      <span className="text-right font-semibold text-foreground">{value}</span>
     </div>
   );
 }
+
