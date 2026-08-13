@@ -184,7 +184,7 @@ function ProductsPage() {
         continue_selling_no_stock: form.continue_selling_no_stock,
         show_recent_activity: form.show_recent_activity,
         recent_activity_frequency: Number(form.recent_activity_frequency) || 30,
-        testimonials: form.testimonials,
+        testimonials: form.testimonials as any,
       };
 
 
