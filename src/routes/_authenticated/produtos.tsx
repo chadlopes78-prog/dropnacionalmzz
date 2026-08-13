@@ -76,6 +76,8 @@ const EMPTY_FORM: FormState = {
   provinces: [...PROVINCES],
   cities: "",
   active: true,
+  action_button_text: "Comprar Agora",
+  action_button_color: "#0D9488",
 };
 
 function toForm(p: Product): FormState {
@@ -93,8 +95,11 @@ function toForm(p: Product): FormState {
     provinces: p.provinces ?? [],
     cities: (p.cities ?? []).join(", "),
     active: p.active,
+    action_button_text: (p as any).action_button_text ?? "Comprar Agora",
+    action_button_color: (p as any).action_button_color ?? "#0D9488",
   };
 }
+
 
 function ProductsPage() {
   const { data: products, isLoading } = useProducts();
