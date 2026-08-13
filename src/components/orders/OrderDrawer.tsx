@@ -89,72 +89,79 @@ export function OrderDrawer({ order, allOrders, open, onOpenChange }: OrderDrawe
 
   const waMessage = buildWaMessage(DEFAULT_WA_TEMPLATE, order.customer_name, order.product_name);
 
+  const confirmDelivery = async () => {
+    if (confirm("Confirmas que o cliente recebeu a encomenda e fez o pagamento? Apenas após confirmar esta encomenda será contabilizada como receita.")) {
+      await run(() => markDelivered(order.id), "Encomenda entregue e paga!");
+    }
+  };
+
   return (
     <>
       <Sheet open={open} onOpenChange={onOpenChange}>
-        <SheetContent side="right" className="w-full gap-0 overflow-y-auto sm:max-w-lg">
-          <SheetHeader className="border-b border-border bg-muted/30 px-4 py-3">
+        <SheetContent side="right" className="w-full gap-0 overflow-y-auto sm:max-w-lg p-0">
+          <SheetHeader className="border-b border-border bg-muted/30 px-6 py-4">
             <div className="flex items-center justify-between">
-              <SheetTitle className="text-lg font-bold">
-                #{order.order_number}
-              </SheetTitle>
+              <div className="flex flex-col">
+                <SheetTitle className="text-xl font-black">
+                  {order.customer_name}
+                </SheetTitle>
+                <SheetDescription className="text-xs font-bold uppercase tracking-widest">
+                  Pedido #{order.order_number}
+                </SheetDescription>
+              </div>
               <StatusBadge status={order.status} />
             </div>
-            <SheetDescription className="text-xs">
-              Recebida em {formatDateTime(order.created_at)}
-            </SheetDescription>
           </SheetHeader>
 
-          <div className="space-y-6 overflow-y-auto p-4 pb-24">
+          <div className="space-y-6 overflow-y-auto p-6 pb-32">
             <CustomerInsights order={order} allOrders={allOrders} />
 
-            {/* Acções principais de contacto */}
-            <div className="grid grid-cols-2 gap-3">
-              <Button size="lg" className="h-12 gap-2 font-bold" asChild>
+            {/* Acções Principais - Painel de Acompanhamento */}
+            <div className="grid grid-cols-1 gap-3">
+              <Button size="lg" className="h-14 gap-3 text-lg font-black shadow-lg shadow-primary/20" asChild>
                 <a href={telLink(order.phone)}>
-                  <Phone className="size-5" /> Ligar
+                  <Phone className="size-6" /> LIGAR AGORA
                 </a>
               </Button>
-              <Button
-                variant="outline"
-                size="lg"
-                className="h-12 gap-2 font-bold text-green-600 border-green-200 hover:bg-green-50"
-                asChild
-              >
-                <a href={whatsappLink(order.phone, waMessage)} target="_blank" rel="noreferrer">
-                  <MessageCircle className="size-5" /> WhatsApp
-                </a>
+              
+              <div className="grid grid-cols-2 gap-2">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="h-12 gap-2 font-black border-2 border-green-600 text-green-700 hover:bg-green-50"
+                  onClick={() =>
+                    run(() => updateOrder(order.id, { status: "confirmada" }), "Encomenda confirmada")
+                  }
+                >
+                  <CheckCircle2 className="size-5" /> CONFIRMOU
+                </Button>
+                <Button variant="outline" size="lg" className="h-12 gap-2 font-black border-2 border-blue-600 text-blue-700 hover:bg-blue-50" onClick={() => setRetryOpen(true)}>
+                  <CalendarClock className="size-5" /> LIGAR DEPOIS
+                </Button>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                <Button
+                  variant="secondary"
+                  className="h-11 font-bold"
+                  onClick={() => run(() => updateOrder(order.id, { status: "em_entrega" }), "A caminho do cliente...")}
+                >
+                  EM ENTREGA
+                </Button>
+                <Button
+                  variant="secondary"
+                  className="h-11 font-bold bg-green-100 text-green-800 hover:bg-green-200"
+                  onClick={confirmDelivery}
+                >
+                  ENTREGUE
+                </Button>
+              </div>
+
+              <Button variant="ghost" className="h-10 font-bold text-red-600 hover:bg-red-50" onClick={() => setCancelOpen(true)}>
+                <XCircle className="size-4 mr-2" /> CANCELAR ENCOMENDA
               </Button>
             </div>
 
-            {/* Gestão de Estado Rápida */}
-            <div className="grid grid-cols-2 gap-2">
-              <Button
-                variant="secondary"
-                size="sm"
-                className="gap-2"
-                onClick={() =>
-                  run(() => updateOrder(order.id, { status: "confirmada" }), "Encomenda confirmada")
-                }
-              >
-                <CheckCircle2 className="size-4 text-green-600" /> Confirmar
-              </Button>
-              <Button variant="secondary" size="sm" className="gap-2" onClick={() => setRetryOpen(true)}>
-                <PhoneOff className="size-4 text-orange-500" /> Não atende
-              </Button>
-              <Button variant="secondary" size="sm" className="gap-2" onClick={() => setRetryOpen(true)}>
-                <CalendarClock className="size-4 text-blue-500" /> Reagendar
-              </Button>
-              <Button variant="secondary" size="sm" className="gap-2" onClick={() => setCancelOpen(true)}>
-                <XCircle className="size-4 text-red-500" /> Cancelar
-              </Button>
-              <Button
-                className="col-span-2 h-11 font-bold"
-                onClick={() => run(() => markDelivered(order.id), "Encomenda marcada como entregue")}
-              >
-                <PackageCheck className="size-5" /> Marcar como entregue
-              </Button>
-            </div>
 
             <Separator />
 
