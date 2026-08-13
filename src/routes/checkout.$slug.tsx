@@ -447,17 +447,7 @@ function CheckoutPage() {
         )}
 
         {/* Informações de confiança */}
-        <div className="mt-8 px-2 pb-10">
-          <div className="flex items-center gap-3 rounded-xl border border-border bg-card p-4">
-            <div className="flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary">
-              <Truck className="size-6" />
-            </div>
-            <div>
-              <p className="text-sm font-bold text-foreground">Entrega em todo Moçambique</p>
-              <p className="text-xs text-muted-foreground">Receba no conforto da sua casa.</p>
-            </div>
-          </div>
-        </div>
+        <div className="mt-8 px-2 pb-10" />
       </div>
     </div>
   );
