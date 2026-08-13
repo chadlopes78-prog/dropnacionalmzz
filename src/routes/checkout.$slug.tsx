@@ -225,9 +225,9 @@ function CheckoutPage() {
 
             <div className="rounded-lg border border-primary/25 bg-primary/8 p-3">
               <p className="flex items-center gap-2 text-sm font-semibold text-primary">
-                <ShieldCheck className="size-4" aria-hidden /> PAGAMENTO NA ENTREGA
+                <ShieldCheck className="size-4" aria-hidden /> PAGAMENTO SOMENTE AO RECEBER O PRODUTO
               </p>
-              <p className="mt-1 text-sm text-foreground">Só paga quando receber o produto.</p>
+              <p className="mt-1 text-sm text-foreground">Receba em casa e pague apenas no ato da entrega.</p>
             </div>
 
             {/* Aviso de Stock */}
@@ -401,13 +401,12 @@ function CheckoutPage() {
               <Row label="Produto" value={product.name} />
               <Row label="Quantidade" value={String(quantity)} />
               <Row label="Preço unitário" value={formatMT(unitPrice)} />
-              <Row label="Custo de entrega" value={formatMT(deliveryCost)} />
               <div className="mt-2 flex items-center justify-between border-t border-border pt-3 text-base font-semibold text-foreground">
                 <span>Total</span>
                 <span>{formatMT(total)}</span>
               </div>
-              <p className="mt-2 rounded-lg bg-primary/10 px-3 py-2 text-sm font-medium text-primary">
-                Pagamento: Na entrega
+              <p className="mt-2 rounded-lg bg-primary/10 px-3 py-2 text-sm font-medium text-primary text-center">
+                Pagamento: Somente ao receber o produto
               </p>
             </CardContent>
           </Card>
@@ -429,6 +428,10 @@ function CheckoutPage() {
                 (product as any).action_button_text || "FINALIZAR ENCOMENDA"
               )}
             </Button>
+            <div className="mt-2 flex items-center justify-center gap-1.5 rounded-full bg-primary/10 px-3 py-1.5 text-[10px] font-bold text-primary animate-in fade-in slide-in-from-bottom-2 duration-500">
+              <ShieldCheck className="size-3" />
+              PAGAMENTO SOMENTE AO RECEBER O PRODUTO
+            </div>
           </div>
 
           <p className="pb-2 text-center text-xs text-muted-foreground">
