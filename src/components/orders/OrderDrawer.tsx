@@ -93,200 +93,197 @@ export function OrderDrawer({ order, allOrders, open, onOpenChange }: OrderDrawe
     <>
       <Sheet open={open} onOpenChange={onOpenChange}>
         <SheetContent side="right" className="w-full gap-0 overflow-y-auto sm:max-w-lg">
-          <SheetHeader className="border-b border-border">
-            <SheetTitle className="flex items-center gap-2">
-              #{order.order_number} · {order.customer_name}
-            </SheetTitle>
-            <SheetDescription>
-              {order.product_name} · {formatDateTime(order.created_at)}
-            </SheetDescription>
-            <div className="pt-1">
+          <SheetHeader className="border-b border-border bg-muted/30 px-4 py-3">
+            <div className="flex items-center justify-between">
+              <SheetTitle className="text-lg font-bold">
+                #{order.order_number}
+              </SheetTitle>
               <StatusBadge status={order.status} />
             </div>
+            <SheetDescription className="text-xs">
+              Recebida em {formatDateTime(order.created_at)}
+            </SheetDescription>
           </SheetHeader>
 
-          <div className="space-y-5 p-4">
+          <div className="space-y-6 overflow-y-auto p-4 pb-24">
             <CustomerInsights order={order} allOrders={allOrders} />
 
-            {/* Acções rápidas */}
-            <div className="grid grid-cols-2 gap-2">
-              <a href={telLink(order.phone)}>
-                <Button className="w-full" size="lg">
-                  <Phone className="size-4" /> Ligar
-                </Button>
-              </a>
-              <a href={whatsappLink(order.phone, waMessage)} target="_blank" rel="noreferrer">
-                <Button variant="outline" className="w-full" size="lg">
-                  <MessageCircle className="size-4" /> WhatsApp
-                </Button>
-              </a>
+            {/* Acções principais de contacto */}
+            <div className="grid grid-cols-2 gap-3">
+              <Button size="lg" className="h-12 gap-2 font-bold" asChild>
+                <a href={telLink(order.phone)}>
+                  <Phone className="size-5" /> Ligar
+                </a>
+              </Button>
+              <Button
+                variant="outline"
+                size="lg"
+                className="h-12 gap-2 font-bold text-green-600 border-green-200 hover:bg-green-50"
+                asChild
+              >
+                <a href={whatsappLink(order.phone, waMessage)} target="_blank" rel="noreferrer">
+                  <MessageCircle className="size-5" /> WhatsApp
+                </a>
+              </Button>
             </div>
 
+            {/* Gestão de Estado Rápida */}
             <div className="grid grid-cols-2 gap-2">
               <Button
                 variant="secondary"
+                size="sm"
+                className="gap-2"
                 onClick={() =>
                   run(() => updateOrder(order.id, { status: "confirmada" }), "Encomenda confirmada")
                 }
               >
-                <CheckCircle2 className="size-4" /> Confirmar
+                <CheckCircle2 className="size-4 text-green-600" /> Confirmar
               </Button>
-              <Button variant="secondary" onClick={() => setRetryOpen(true)}>
-                <PhoneOff className="size-4" /> Não atende
+              <Button variant="secondary" size="sm" className="gap-2" onClick={() => setRetryOpen(true)}>
+                <PhoneOff className="size-4 text-orange-500" /> Não atende
               </Button>
-              <Button variant="secondary" onClick={() => setRetryOpen(true)}>
-                <CalendarClock className="size-4" /> Reagendar
+              <Button variant="secondary" size="sm" className="gap-2" onClick={() => setRetryOpen(true)}>
+                <CalendarClock className="size-4 text-blue-500" /> Reagendar
               </Button>
-              <Button variant="secondary" onClick={() => setCancelOpen(true)}>
-                <XCircle className="size-4" /> Cancelar
+              <Button variant="secondary" size="sm" className="gap-2" onClick={() => setCancelOpen(true)}>
+                <XCircle className="size-4 text-red-500" /> Cancelar
               </Button>
               <Button
-                className="col-span-2"
+                className="col-span-2 h-11 font-bold"
                 onClick={() => run(() => markDelivered(order.id), "Encomenda marcada como entregue")}
               >
-                <PackageCheck className="size-4" /> Marcar como entregue
+                <PackageCheck className="size-5" /> Marcar como entregue
               </Button>
             </div>
 
             <Separator />
 
-            {/* Estado e responsável */}
-            <div className="grid gap-3 sm:grid-cols-2">
-              <div className="space-y-1.5">
-                <Label>Estado</Label>
-                <Select
-                  value={order.status}
-                  onValueChange={(v) =>
-                    run(
-                      () =>
-                        v === "entregue"
-                          ? markDelivered(order.id)
-                          : updateOrder(order.id, { status: v as OrderStatus }),
-                      "Estado actualizado",
-                    )
-                  }
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {STATUSES.map((s) => (
-                      <SelectItem key={s.value} value={s.value}>
-                        {s.label}
-                      </SelectItem>
+            {/* Informação Detalhada em Secções */}
+            <div className="space-y-6">
+              {/* Cliente e Localização */}
+              <section className="space-y-3">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Cliente e Localização</h3>
+                <div className="rounded-xl border border-border bg-muted/20 p-4 space-y-3">
+                  <DetailRow label="Nome" value={order.customer_name} />
+                  <DetailRow label="Telefone" value={`+258 ${order.phone}`} />
+                  <Separator className="opacity-50" />
+                  <DetailRow label="Província" value={order.province} />
+                  <DetailRow label="Cidade / Distrito" value={order.city} />
+                  <DetailRow label="Bairro" value={order.neighborhood} />
+                  <DetailRow label="Ponto de Referência" value={order.reference_point ?? "Não informado"} />
+                </div>
+              </section>
+
+              {/* Encomenda */}
+              <section className="space-y-3">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Encomenda</h3>
+                <div className="rounded-xl border border-border bg-muted/20 p-4 space-y-3">
+                  <DetailRow label="Produto" value={order.product_name} />
+                  <DetailRow label="Quantidade" value={`${order.quantity} unidades`} />
+                  <DetailRow label="Preço Unitário" value={formatMT(order.unit_price)} />
+                  <DetailRow label="Taxa de Entrega" value={formatMT(order.delivery_cost)} />
+                  <div className="flex items-center justify-between pt-2 border-t border-border/50">
+                    <span className="font-bold text-foreground">Total a cobrar</span>
+                    <span className="text-lg font-black text-primary">{formatMT(order.total)}</span>
+                  </div>
+                </div>
+              </section>
+
+              {/* Contacto e Gestão */}
+              <section className="space-y-3">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Contacto e Gestão</h3>
+                <div className="rounded-xl border border-border bg-muted/20 p-4 space-y-3">
+                  <DetailRow 
+                    label="Melhor horário" 
+                    value={order.contact_slot ?? order.contact_period ?? "A qualquer hora"} 
+                  />
+                  <DetailRow 
+                    label="Chamada agendada" 
+                    value={order.callback_at ? formatDateTime(order.callback_at) : "Sem agendamento"} 
+                  />
+                  <Separator className="opacity-50" />
+                  <div className="space-y-1.5">
+                    <Label className="text-[10px] text-muted-foreground uppercase">Responsável</Label>
+                    <Select
+                      value={order.assignee ?? "__none"}
+                      onValueChange={(v) =>
+                        run(
+                          () => updateOrder(order.id, { assignee: v === "__none" ? null : v }),
+                          "Responsável actualizado",
+                        )
+                      }
+                    >
+                      <SelectTrigger className="h-9">
+                        <SelectValue placeholder="Sem responsável" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="__none">Sem responsável</SelectItem>
+                        {(team ?? []).map((m) => (
+                          <SelectItem key={m.id} value={m.name}>
+                            {m.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+              </section>
+
+              {/* Notas Internas */}
+              <section className="space-y-3">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Notas Internas</h3>
+                <div className="space-y-3">
+                  <Textarea
+                    rows={2}
+                    value={note}
+                    onChange={(e) => setNote(e.target.value)}
+                    placeholder="Adicionar uma nota interna..."
+                    className="resize-none"
+                  />
+                  <Button
+                    size="sm"
+                    className="w-full"
+                    disabled={!note.trim()}
+                    onClick={() =>
+                      run(async () => {
+                        await addNote(order.id, note.trim());
+                        setNote("");
+                      }, "Nota adicionada")
+                    }
+                  >
+                    Guardar nota
+                  </Button>
+                  <div className="space-y-2">
+                    {(notes ?? []).map((n) => (
+                      <div key={n.id} className="rounded-lg bg-muted/40 p-3 text-sm">
+                        <p className="text-foreground">{n.content}</p>
+                        <p className="mt-1 text-[10px] text-muted-foreground">
+                          {formatDateTime(n.created_at)}
+                        </p>
+                      </div>
                     ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-1.5">
-                <Label>Responsável</Label>
-                <Select
-                  value={order.assignee ?? "__none"}
-                  onValueChange={(v) =>
-                    run(
-                      () => updateOrder(order.id, { assignee: v === "__none" ? null : v }),
-                      "Responsável actualizado",
-                    )
-                  }
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Sem responsável" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="__none">Sem responsável</SelectItem>
-                    {(team ?? []).map((m) => (
-                      <SelectItem key={m.id} value={m.name}>
-                        {m.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
+                  </div>
+                </div>
+              </section>
 
-            <Separator />
-
-            {/* Ficha */}
-            <div className="space-y-1.5 text-sm">
-              <h3 className="mb-2 text-sm font-semibold text-foreground">Ficha do cliente</h3>
-              <Row label="Telefone" value={`+258 ${order.phone}`} />
-              <Row label="Produto" value={order.product_name} />
-              <Row label="Quantidade" value={String(order.quantity)} />
-              <Row label="Preço unitário" value={formatMT(order.unit_price)} />
-              <Row label="Entrega" value={formatMT(order.delivery_cost)} />
-              <Row label="Total a cobrar" value={formatMT(order.total)} />
-              <Row label="Província" value={order.province} />
-              <Row label="Cidade / Distrito" value={order.city} />
-              <Row label="Bairro" value={order.neighborhood} />
-              <Row label="Ponto de referência" value={order.reference_point ?? "—"} />
-              <Row
-                label="Horário preferido"
-                value={[order.contact_period, order.contact_slot].filter(Boolean).join(" · ") || "—"}
-              />
-              <Row label="Data da encomenda" value={formatDateTime(order.created_at)} />
-              <Row label="Chamada agendada" value={formatDateTime(order.callback_at)} />
-              <Row label="Entregue em" value={formatDateTime(order.delivered_at)} />
-              {order.cancel_reason ? (
-                <Row label="Motivo do cancelamento" value={order.cancel_reason} />
-              ) : null}
-            </div>
-
-            <Separator />
-
-            {/* Notas internas */}
-            <div className="space-y-2">
-              <h3 className="text-sm font-semibold text-foreground">Notas internas</h3>
-              <p className="text-xs text-muted-foreground">
-                Visíveis apenas para a equipa. O cliente nunca vê estas notas.
-              </p>
-              <Textarea
-                rows={2}
-                value={note}
-                onChange={(e) => setNote(e.target.value)}
-                placeholder="Ex.: Cliente pediu para entregar no trabalho."
-              />
-              <Button
-                size="sm"
-                disabled={!note.trim()}
-                onClick={() =>
-                  run(async () => {
-                    await addNote(order.id, note.trim());
-                    setNote("");
-                  }, "Nota adicionada")
-                }
-              >
-                Adicionar nota
-              </Button>
-              <ul className="space-y-2 pt-1">
-                {(notes ?? []).map((n) => (
-                  <li key={n.id} className="rounded-lg border border-border bg-muted/40 p-2.5">
-                    <p className="text-sm text-foreground">{n.content}</p>
-                    <p className="mt-1 text-[11px] text-muted-foreground">
-                      {formatDateTime(n.created_at)}
-                    </p>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <Separator />
-
-            {/* Histórico */}
-            <div className="space-y-2">
-              <h3 className="text-sm font-semibold text-foreground">Histórico</h3>
-              <ol className="space-y-2 border-l border-border pl-4">
-                {(events ?? []).map((ev) => (
-                  <li key={ev.id} className="relative text-sm">
-                    <span className="absolute -left-[21px] top-1.5 size-2 rounded-full bg-primary" />
-                    <p className="text-[11px] text-muted-foreground">
-                      {formatDateTime(ev.created_at)}
-                    </p>
-                    <p className="text-foreground">{ev.description}</p>
-                  </li>
-                ))}
-              </ol>
+              {/* Histórico */}
+              <section className="space-y-3 pb-8">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Histórico de Alterações</h3>
+                <div className="relative space-y-4 border-l-2 border-muted pl-4 ml-2">
+                  {(events ?? []).map((ev) => (
+                    <div key={ev.id} className="relative">
+                      <div className="absolute -left-[21px] top-1.5 h-2.5 w-2.5 rounded-full border-2 border-background bg-primary" />
+                      <p className="text-[10px] font-medium text-muted-foreground">
+                        {formatDateTime(ev.created_at)}
+                      </p>
+                      <p className="text-sm font-medium text-foreground">{ev.description}</p>
+                    </div>
+                  ))}
+                </div>
+              </section>
             </div>
           </div>
+
         </SheetContent>
       </Sheet>
 
@@ -395,11 +392,12 @@ export function OrderDrawer({ order, allOrders, open, onOpenChange }: OrderDrawe
   );
 }
 
-function Row({ label, value }: { label: string; value: string }) {
+function DetailRow({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-start justify-between gap-3">
-      <span className="text-muted-foreground">{label}</span>
-      <span className="max-w-[60%] text-right font-medium text-foreground">{value}</span>
+    <div className="flex flex-col gap-0.5">
+      <span className="text-[10px] font-bold uppercase tracking-tight text-muted-foreground">{label}</span>
+      <span className="text-sm font-semibold text-foreground">{value}</span>
     </div>
   );
 }
+
