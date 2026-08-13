@@ -46,7 +46,7 @@ function StoreHome() {
   return (
     <div className="min-h-screen bg-background">
       {/* Dynamic Navigation */}
-      <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-md">
+      <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-md pt-[env(safe-area-inset-top)]">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-2">
             <div className="flex size-9 items-center justify-center rounded-xl bg-primary shadow-sm shadow-primary/20">
@@ -229,7 +229,7 @@ function StoreHome() {
       </section>
 
       {/* Footer */}
-      <footer className="mt-20 border-t border-border/50 bg-card/30 py-12 backdrop-blur-sm">
+      <footer className="mt-20 border-t border-border/50 bg-card/30 py-12 backdrop-blur-sm pb-[max(3rem,calc(env(safe-area-inset-bottom)+3rem))]">
         <div className="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
           <div className="flex items-center justify-center gap-2">
             <div className="flex size-7 items-center justify-center rounded-lg bg-primary/20">

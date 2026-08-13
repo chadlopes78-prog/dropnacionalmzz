@@ -98,7 +98,7 @@ export function AppShell({ title, description, actions, children }: AppShellProp
       </aside>
 
       <div className="lg:pl-60">
-        <header className="sticky top-0 z-20 flex items-center gap-3 border-b border-border bg-card/85 px-4 py-3 backdrop-blur md:px-6">
+        <header className="sticky top-0 z-20 flex items-center gap-3 border-b border-border bg-card/85 px-4 py-3 backdrop-blur md:px-6 pt-[max(0.75rem,env(safe-area-inset-top))]">
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="lg:hidden" aria-label="Abrir menu">
@@ -120,7 +120,7 @@ export function AppShell({ title, description, actions, children }: AppShellProp
           </div>
           {actions}
         </header>
-        <main className={cn("px-4 py-5 md:px-6 md:py-6")}>{children}</main>
+        <main className={cn("px-4 py-5 md:px-6 md:py-6 pb-[max(1.25rem,calc(env(safe-area-inset-bottom)+1.25rem))]")}>{children}</main>
       </div>
     </div>
   );

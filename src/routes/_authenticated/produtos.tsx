@@ -219,7 +219,7 @@ function ProductsPage() {
           </CardContent>
         </Card>
       ) : (
-        <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-3 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
           {list.map((p) => (
             <Card key={p.id}>
               <CardContent className="space-y-3">

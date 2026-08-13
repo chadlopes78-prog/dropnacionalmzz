@@ -186,7 +186,7 @@ function CheckoutPage() {
   }
 
   return (
-    <div className="min-h-screen bg-muted/40 pb-28">
+    <div className="min-h-screen bg-muted/40 pb-[max(7rem,calc(env(safe-area-inset-bottom)+7rem))]">
       <div className="mx-auto max-w-lg px-4 py-5">
         <CountdownTimer product={product} />
 
@@ -382,22 +382,24 @@ function CheckoutPage() {
             </CardContent>
           </Card>
 
-          <Button
-            type="submit"
-            size="lg"
-            className="h-14 w-full text-base font-bold shadow-lg transition-transform active:scale-[0.98]"
-            disabled={submitting}
-            style={{
-              backgroundColor: (product as any).action_button_color || "#0D9488",
-              color: "white",
-            }}
-          >
-            {submitting ? (
-              <Loader2 className="size-5 animate-spin" />
-            ) : (
-              (product as any).action_button_text || "FINALIZAR ENCOMENDA"
-            )}
-          </Button>
+          <div className="fixed bottom-0 left-0 right-0 z-50 bg-background/80 p-4 backdrop-blur-md border-t border-border lg:static lg:bg-transparent lg:p-0 lg:border-none pb-[max(1rem,env(safe-area-inset-bottom))]">
+            <Button
+              type="submit"
+              size="lg"
+              className="h-14 w-full text-base font-bold shadow-lg transition-transform active:scale-[0.98]"
+              disabled={submitting}
+              style={{
+                backgroundColor: (product as any).action_button_color || "#0D9488",
+                color: "white",
+              }}
+            >
+              {submitting ? (
+                <Loader2 className="size-5 animate-spin" />
+              ) : (
+                (product as any).action_button_text || "FINALIZAR ENCOMENDA"
+              )}
+            </Button>
+          </div>
 
           <p className="pb-2 text-center text-xs text-muted-foreground">
             Não é necessário pagar agora. Sem M-Pesa, e-Mola ou cartão.
