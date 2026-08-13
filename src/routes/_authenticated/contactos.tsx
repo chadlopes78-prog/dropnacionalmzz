@@ -9,11 +9,12 @@ import {
   applyFilters,
   type FiltersState,
 } from "@/components/orders/OrderFilters";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useOrders, type Order } from "@/hooks/useOrders";
 import { DEFAULT_WA_TEMPLATE } from "@/lib/domain";
+
 
 export const Route = createFileRoute("/_authenticated/contactos")({
   head: () => ({
@@ -59,14 +60,17 @@ function ContactsPage() {
           assignees={assignees}
         />
 
-        <div className="max-w-xl space-y-1.5">
-          <Label className="text-xs">Mensagem padrão de WhatsApp</Label>
-          <Input
+        <div className="max-w-xl space-y-1.5 rounded-xl border border-border bg-muted/20 p-4">
+          <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Mensagem padrão de WhatsApp</Label>
+          <Textarea
+            rows={2}
             value={waTemplate}
             onChange={(e) => setWaTemplate(e.target.value)}
             placeholder="Use {CLIENTE} e {PRODUTO}"
+            className="bg-background"
           />
         </div>
+
 
         {isLoading ? (
           <Skeleton className="h-96 w-full rounded-xl" />
