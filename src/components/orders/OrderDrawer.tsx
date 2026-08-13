@@ -99,7 +99,7 @@ export function OrderDrawer({ order, allOrders, open, onOpenChange }: OrderDrawe
     <>
       <Sheet open={open} onOpenChange={onOpenChange}>
         <SheetContent side="right" className="w-full gap-0 overflow-y-auto sm:max-w-lg p-0">
-          <SheetHeader className="border-b border-border bg-muted/30 px-6 py-4">
+          <SheetHeader className="border-b border-border bg-muted/30 px-6 py-4 pt-[max(1rem,env(safe-area-inset-top))]">
             <div className="flex items-center justify-between">
               <div className="flex flex-col">
                 <SheetTitle className="text-xl font-black">
@@ -113,7 +113,7 @@ export function OrderDrawer({ order, allOrders, open, onOpenChange }: OrderDrawe
             </div>
           </SheetHeader>
 
-          <div className="space-y-6 overflow-y-auto p-6 pb-32">
+          <div className="space-y-6 overflow-y-auto p-6 pb-[max(8rem,calc(env(safe-area-inset-bottom)+8rem))]">
             <CustomerInsights order={order} allOrders={allOrders} />
 
             {/* Acções Principais - Painel de Acompanhamento */}

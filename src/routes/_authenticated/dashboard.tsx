@@ -134,7 +134,7 @@ function DashboardPage() {
         </div>
       ) : (
         <>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-3 grid-cols-2 lg:grid-cols-4">
             <Stat label="Encomendas de hoje" value={stats.today} />
             <Stat label="Novas encomendas" value={stats.nova} tone="new" />
             <Stat label="Por ligar" value={stats.porLigar} tone="warn" />
@@ -145,9 +145,9 @@ function DashboardPage() {
             <Stat label="Entregues" value={stats.entregues} tone="ok" />
             <Stat label="Canceladas" value={stats.canceladas} tone="danger" />
             <Stat label="Receita entregue" value={formatMT(stats.revenue)} tone="ok" />
-            <Stat label="Taxa de confirmação" value={`${stats.confirmRate.toFixed(1)}%`} />
-            <Stat label="Taxa de entrega" value={`${stats.deliveryRate.toFixed(1)}%`} />
-            <Stat label="Taxa de cancelamento" value={`${stats.cancelRate.toFixed(1)}%`} />
+            <Stat label="Taxa confirmação" value={`${stats.confirmRate.toFixed(1)}%`} />
+            <Stat label="Taxa entrega" value={`${stats.deliveryRate.toFixed(1)}%`} />
+            <Stat label="Taxa cancelam." value={`${stats.cancelRate.toFixed(1)}%`} />
             <Stat label="Ticket médio" value={formatMT(stats.avgTicket)} />
           </div>
 
