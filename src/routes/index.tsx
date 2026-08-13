@@ -208,9 +208,17 @@ function StoreHome() {
                       </span>
                     </div>
                     <Link to="/checkout/$slug" params={{ slug: p.slug }}>
-                      <Button size="sm" className="rounded-full px-5 font-bold shadow-lg shadow-primary/10 transition-transform active:scale-95">
-                        Encomendar
+                      <Button 
+                        size="sm" 
+                        className="rounded-full px-5 font-bold shadow-lg shadow-primary/10 transition-transform active:scale-95"
+                        style={{
+                          backgroundColor: (p as any).action_button_color || "#0D9488",
+                          color: "white"
+                        }}
+                      >
+                        {(p as any).action_button_text || "Encomendar"}
                       </Button>
+
                     </Link>
                   </div>
                 </div>
