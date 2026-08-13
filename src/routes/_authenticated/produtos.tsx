@@ -309,12 +309,6 @@ function ProductsPage() {
                 }
               />
             </Field>
-            <Field label="Endereço do checkout (slug)">
-              <Input
-                value={form.slug}
-                onChange={(e) => setForm((f) => ({ ...f, slug: slugify(e.target.value) }))}
-              />
-            </Field>
             <Field label="Descrição curta">
               <Textarea
                 rows={3}
