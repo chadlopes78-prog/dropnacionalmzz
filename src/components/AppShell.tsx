@@ -23,33 +23,65 @@ import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/s
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 
-const NAV = [
-  { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { to: "/contactos", label: "Contactos", icon: Users },
-  { to: "/por-ligar", label: "Por ligar", icon: PhoneCall },
-  { to: "/confirmadas", label: "Confirmadas", icon: CheckCircle2 },
-  { to: "/em-entrega", label: "Em entrega", icon: Truck },
-  { to: "/entregues", label: "Entregues", icon: PackageCheck },
-  { to: "/produtos", label: "Produtos", icon: Boxes },
-  { to: "/equipa", label: "Equipa", icon: UsersRound },
+const NAVIGATION_GROUPS = [
+  {
+    title: "PRINCIPAL",
+    items: [
+      { to: "/dashboard", label: "Visão Geral", icon: LayoutDashboard },
+      { to: "/produtos", label: "Produtos", icon: Boxes },
+      { to: "/contactos", label: "Contactos", icon: Phone },
+    ],
+  },
+  {
+    title: "ENCOMENDAS",
+    items: [
+      { to: "/por-ligar", label: "Por Ligar", icon: PhoneCall },
+      { to: "/confirmadas", label: "Confirmadas", icon: Check },
+      { to: "/em-entrega", label: "Em Entrega", icon: Truck },
+      { to: "/entregues", label: "Entregues", icon: CheckCircle2 },
+      { to: "/canceladas", label: "Canceladas", icon: XCircle },
+    ],
+  },
+  {
+    title: "ANÁLISE",
+    items: [
+      { to: "/relatorios", label: "Relatórios", icon: BarChart3 },
+    ],
+  },
+  {
+    title: "GESTÃO",
+    items: [
+      { to: "/equipa", label: "Equipa", icon: UsersRound },
+      { to: "/configuracoes", label: "Configurações", icon: Settings },
+    ],
+  },
 ] as const;
 
 function NavList({ onNavigate }: { onNavigate?: () => void }) {
   return (
-    <nav className="flex flex-col gap-1 p-3">
-      {NAV.map(({ to, label, icon: Icon }) => (
-        <Link
-          key={to}
-          to={to}
-          onClick={onNavigate}
-          className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-sidebar-foreground/75 transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-          activeProps={{
-            className: "bg-sidebar-accent text-sidebar-accent-foreground",
-          }}
-        >
-          <Icon className="size-4 shrink-0" aria-hidden />
-          {label}
-        </Link>
+    <nav className="flex flex-col gap-5 p-3">
+      {NAVIGATION_GROUPS.map((group) => (
+        <div key={group.title} className="space-y-1">
+          <h4 className="px-3 text-[10px] font-bold tracking-wider text-sidebar-foreground/40 uppercase">
+            {group.title}
+          </h4>
+          <div className="flex flex-col gap-0.5">
+            {group.items.map(({ to, label, icon: Icon }) => (
+              <Link
+                key={to}
+                to={to}
+                onClick={onNavigate}
+                className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-sidebar-foreground/75 transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                activeProps={{
+                  className: "bg-sidebar-accent text-sidebar-accent-foreground",
+                }}
+              >
+                <Icon className="size-4 shrink-0" aria-hidden />
+                {label}
+              </Link>
+            ))}
+          </div>
+        </div>
       ))}
     </nav>
   );
