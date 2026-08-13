@@ -331,20 +331,6 @@ function ProductsPage() {
                   onChange={(e) => setForm((f) => ({ ...f, promo_price: e.target.value }))}
                 />
               </Field>
-              <Field label="Custo do produto (MT)">
-                <Input
-                  inputMode="decimal"
-                  value={form.product_cost}
-                  onChange={(e) => setForm((f) => ({ ...f, product_cost: e.target.value }))}
-                />
-              </Field>
-              <Field label="Custo de entrega (MT)">
-                <Input
-                  inputMode="decimal"
-                  value={form.delivery_cost}
-                  onChange={(e) => setForm((f) => ({ ...f, delivery_cost: e.target.value }))}
-                />
-              </Field>
               <Field label="Stock disponível">
                 <Input
                   inputMode="numeric"
