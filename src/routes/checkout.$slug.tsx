@@ -428,6 +428,10 @@ function CheckoutPage() {
                 (product as any).action_button_text || "FINALIZAR ENCOMENDA"
               )}
             </Button>
+            <div className="mt-2 flex items-center justify-center gap-1.5 rounded-full bg-primary/10 px-3 py-1.5 text-[10px] font-bold text-primary animate-in fade-in slide-in-from-bottom-2 duration-500">
+              <ShieldCheck className="size-3" />
+              PAGAMENTO SOMENTE AO RECEBER O PRODUTO
+            </div>
           </div>
 
           <p className="pb-2 text-center text-xs text-muted-foreground">
