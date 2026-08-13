@@ -551,7 +551,10 @@ function ProductsPage() {
                                   .getPublicUrl(data.path);
                                 setForm((f) => {
                                   const updated = [...f.testimonials];
-                                  updated[i] = { ...updated[i], image_url: publicUrl };
+                                  const item = updated[i];
+                                  if (item) {
+                                    updated[i] = { ...item, image_url: publicUrl };
+                                  }
                                   return { ...f, testimonials: updated };
                                 });
                               }
@@ -565,8 +568,11 @@ function ProductsPage() {
                             value={t.name}
                             onChange={(e) => {
                               const updated = [...form.testimonials];
-                              updated[i] = { ...updated[i], name: e.target.value };
-                              setForm((f) => ({ ...f, testimonials: updated }));
+                              const item = updated[i];
+                              if (item) {
+                                updated[i] = { ...item, name: e.target.value };
+                                setForm((f) => ({ ...f, testimonials: updated }));
+                              }
                             }}
                           />
                           <Input
@@ -575,8 +581,11 @@ function ProductsPage() {
                             value={t.city}
                             onChange={(e) => {
                               const updated = [...form.testimonials];
-                              updated[i] = { ...updated[i], city: e.target.value };
-                              setForm((f) => ({ ...f, testimonials: updated }));
+                              const item = updated[i];
+                              if (item) {
+                                updated[i] = { ...item, city: e.target.value };
+                                setForm((f) => ({ ...f, testimonials: updated }));
+                              }
                             }}
                           />
                         </div>
@@ -588,8 +597,11 @@ function ProductsPage() {
                         value={t.text}
                         onChange={(e) => {
                           const updated = [...form.testimonials];
-                          updated[i] = { ...updated[i], text: e.target.value };
-                          setForm((f) => ({ ...f, testimonials: updated }));
+                          const item = updated[i];
+                          if (item) {
+                            updated[i] = { ...item, text: e.target.value };
+                            setForm((f) => ({ ...f, testimonials: updated }));
+                          }
                         }}
                       />
                       <div className="flex justify-end gap-1">
