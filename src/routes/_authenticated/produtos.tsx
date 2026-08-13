@@ -365,6 +365,32 @@ function ProductsPage() {
                 />
               </Field>
             </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <Field label="Texto do botão">
+                <Input
+                  value={form.action_button_text}
+                  onChange={(e) => setForm((f) => ({ ...f, action_button_text: e.target.value }))}
+                  placeholder="Comprar Agora"
+                />
+              </Field>
+              <Field label="Cor do botão">
+                <div className="flex gap-2">
+                  <Input
+                    type="color"
+                    className="h-9 w-12 p-1"
+                    value={form.action_button_color}
+                    onChange={(e) => setForm((f) => ({ ...f, action_button_color: e.target.value }))}
+                  />
+                  <Input
+                    value={form.action_button_color}
+                    onChange={(e) => setForm((f) => ({ ...f, action_button_color: e.target.value }))}
+                    placeholder="#0D9488"
+                  />
+                </div>
+              </Field>
+            </div>
+
             <div className="space-y-1.5">
               <Label className="text-xs">Imagem do produto</Label>
               <div className="flex flex-col gap-2">
