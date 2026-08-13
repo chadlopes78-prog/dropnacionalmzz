@@ -112,11 +112,11 @@ export function OrderFilters({
       <div className="flex flex-wrap gap-2">
         {[
           { label: "Todos", value: "todos" },
-          { label: "Novos", value: "por_ligar" }, // Usando o estado interno correspondente
+          { label: "Novos", value: "nova" },
           { label: "Por ligar", value: "por_ligar" },
-          { label: "Não atende", value: "nao_atende" },
-          { label: "Reagendados", value: "agendada" },
           { label: "Confirmados", value: "confirmada" },
+          { label: "Em entrega", value: "em_entrega" },
+          { label: "Entregues", value: "entregue" },
           { label: "Cancelados", value: "cancelada" },
         ].map((s) => {
           const isActive = value.status === s.value;
@@ -124,17 +124,18 @@ export function OrderFilters({
             <button
               key={s.label + s.value}
               onClick={() => set({ status: s.value })}
-              className={`rounded-full px-4 py-1.5 text-xs font-medium transition-all ${
+              className={`rounded-full px-4 py-1.5 text-xs font-bold transition-all ${
                 isActive
-                  ? "bg-primary text-primary-foreground"
+                  ? "bg-primary text-primary-foreground shadow-md"
                   : "bg-muted text-muted-foreground hover:bg-muted/80"
               }`}
             >
-              {s.label}
+              {s.label.toUpperCase()}
             </button>
           );
         })}
       </div>
+
 
       {/* Filtros Dropdown */}
       <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">

@@ -1,4 +1,4 @@
-import { Phone, MessageCircle, MoreHorizontal, MapPin, ShoppingBag, Clock } from "lucide-react";
+import { Phone, MessageCircle, CheckCircle2, PhoneOff, CalendarClock, XCircle, PackageCheck, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -11,12 +11,12 @@ import {
 import { StatusBadge } from "@/components/StatusBadge";
 import type { Order } from "@/hooks/useOrders";
 import {
-  DEFAULT_WA_TEMPLATE,
-  buildWaMessage,
   formatDateTime,
   formatMT,
   telLink,
   whatsappLink,
+  buildWaMessage,
+  DEFAULT_WA_TEMPLATE
 } from "@/lib/domain";
 
 export interface OrdersTableProps {
@@ -33,185 +33,151 @@ export function OrdersTable({
   if (orders.length === 0) {
     return (
       <p className="rounded-lg border border-dashed border-border p-8 text-center text-sm text-muted-foreground">
-        Nenhum contacto encontrado com estes filtros.
+        Nenhum contacto encontrado nesta aba.
       </p>
     );
   }
 
+  // Ordenação: POR LIGAR com callback_at passado vêm primeiro (ATRASADOS)
+  const sortedOrders = [...orders].sort((a, b) => {
+    const now = new Date();
+    
+    // Verificação de atraso para agendados
+    const isLateA = a.status === 'agendada' && a.callback_at && new Date(a.callback_at) < now;
+    const isLateB = b.status === 'agendada' && b.callback_at && new Date(b.callback_at) < now;
+
+    if (isLateA && !isLateB) return -1;
+    if (!isLateA && isLateB) return 1;
+    
+    // Por defeito, mais recentes primeiro
+    return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+  });
+
   return (
     <div className="space-y-4">
       {/* Desktop View */}
-      <div className="hidden overflow-x-auto rounded-xl border border-border bg-card lg:block">
+      <div className="hidden overflow-x-auto rounded-xl border border-border bg-card lg:block shadow-sm">
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead>Cliente</TableHead>
-              <TableHead>Telefone</TableHead>
-              <TableHead>Província</TableHead>
-              <TableHead>Cidade</TableHead>
-              <TableHead>Produto</TableHead>
-              <TableHead>Horário</TableHead>
-              <TableHead>Data</TableHead>
-              <TableHead>Estado</TableHead>
-              <TableHead className="text-right">Acções</TableHead>
+            <TableRow className="bg-muted/30">
+              <TableHead className="font-bold">Cliente</TableHead>
+              <TableHead className="font-bold">Telefone</TableHead>
+              <TableHead className="font-bold">Província</TableHead>
+              <TableHead className="font-bold">Produto</TableHead>
+              <TableHead className="font-bold">Próxima Ligação</TableHead>
+              <TableHead className="font-bold">Estado</TableHead>
+              <TableHead className="text-right font-bold">Acções</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {orders.map((o) => (
-              <TableRow key={o.id} className="cursor-pointer" onClick={() => onSelect(o)}>
-                <TableCell className="font-semibold">
-                  <div className="flex items-center gap-2">
-                    {o.status === "por_ligar" && (
-                      <span className="h-2 w-2 rounded-full bg-blue-500 animate-pulse" title="NOVO" />
+            {sortedOrders.map((o) => {
+              const now = new Date();
+              const isLate = o.status === 'agendada' && o.callback_at && new Date(o.callback_at) < now;
+              
+              return (
+                <TableRow key={o.id} className="cursor-pointer hover:bg-muted/20" onClick={() => onSelect(o)}>
+                  <TableCell>
+                    <div className="flex flex-col">
+                      <span className="font-bold">{o.customer_name}</span>
+                      <span className="text-[10px] text-muted-foreground">{formatDateTime(o.created_at)}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell className="font-medium text-blue-600">+258 {o.phone}</TableCell>
+                  <TableCell>{o.province}</TableCell>
+                  <TableCell>
+                    <div className="flex flex-col">
+                      <span className="font-medium">{o.product_name}</span>
+                      <span className="text-[10px] text-muted-foreground">{o.quantity} un · {formatMT(o.total)}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    {isLate ? (
+                      <div className="flex items-center gap-1.5 text-red-600 font-bold animate-pulse">
+                        <AlertCircle className="size-3" />
+                        <span className="text-xs">ATRASADA</span>
+                      </div>
+                    ) : (
+                      <span className="text-xs font-medium">
+                        {o.callback_at ? formatDateTime(o.callback_at).split(' ')[1] : (o.contact_slot ?? "—")}
+                      </span>
                     )}
-                    {o.customer_name}
-                  </div>
-                </TableCell>
-                <TableCell className="whitespace-nowrap font-medium">+258 {o.phone}</TableCell>
-                <TableCell>{o.province}</TableCell>
-                <TableCell>{o.city}</TableCell>
-                <TableCell className="max-w-40 truncate">{o.product_name}</TableCell>
-                <TableCell className="whitespace-nowrap text-xs text-muted-foreground">
-                  {o.contact_slot ?? o.contact_period ?? "—"}
-                </TableCell>
-                <TableCell className="whitespace-nowrap text-xs">
-                  {formatDateTime(o.created_at)}
-                </TableCell>
-                <TableCell>
-                  <StatusBadge status={o.status} />
-                </TableCell>
-                <TableCell onClick={(e) => e.stopPropagation()} className="text-right">
-                  <div className="flex justify-end gap-1">
-                    <Button
-                      size="icon"
-                      variant="ghost"
-                      className="size-8 text-blue-600 hover:bg-blue-50"
-                      asChild
-                    >
-                      <a href={telLink(o.phone)} title="Ligar">
-                        <Phone className="size-4" />
-                      </a>
-                    </Button>
-                    <Button
-                      size="icon"
-                      variant="ghost"
-                      className="size-8 text-green-600 hover:bg-green-50"
-                      asChild
-                    >
-                      <a
-                        href={whatsappLink(
-                          o.phone,
-                          buildWaMessage(waTemplate, o.customer_name, o.product_name)
-                        )}
-                        target="_blank"
-                        rel="noreferrer"
-                        title="WhatsApp"
-                      >
-                        <MessageCircle className="size-4" />
-                      </a>
-                    </Button>
-                    <Button size="icon" variant="ghost" className="size-8" onClick={() => onSelect(o)}>
-                      <MoreHorizontal className="size-4" />
-                    </Button>
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
+                  </TableCell>
+                  <TableCell>
+                    <StatusBadge status={o.status} />
+                  </TableCell>
+                  <TableCell onClick={(e) => e.stopPropagation()} className="text-right">
+                    <div className="flex justify-end gap-1">
+                      <Button size="sm" variant="outline" className="h-8 gap-1 font-bold bg-blue-50 text-blue-700 border-blue-200" asChild>
+                        <a href={telLink(o.phone)}>
+                          <Phone className="size-3.5" /> Ligar
+                        </a>
+                      </Button>
+                      <Button size="sm" variant="secondary" className="h-8 font-bold" onClick={() => onSelect(o)}>
+                        Gerir
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </div>
 
       {/* Mobile/Tablet View (Cards) */}
-      <div className="grid gap-3 lg:hidden">
-        {orders.map((o) => (
-          <div
-            key={o.id}
-            className="group relative flex flex-col rounded-2xl border border-border bg-card p-4 transition-all active:scale-[0.98]"
-            onClick={() => onSelect(o)}
-          >
-            {/* Header: Nome e Badge Novo */}
-            <div className="flex items-start justify-between">
-              <div>
-                <h3 className="flex items-center gap-2 font-bold text-foreground">
-                  {o.customer_name}
-                  {o.status === "por_ligar" && (
-                    <span className="rounded-full bg-blue-100 px-2 py-0.5 text-[10px] font-bold text-blue-600">
-                      NOVO
+      <div className="grid gap-4 lg:hidden">
+        {sortedOrders.map((o) => {
+          const now = new Date();
+          const isLate = o.status === 'agendada' && o.callback_at && new Date(o.callback_at) < now;
+          
+          return (
+            <div
+              key={o.id}
+              className="flex flex-col rounded-2xl border border-border bg-card p-5 shadow-sm active:scale-[0.98] transition-transform"
+              onClick={() => onSelect(o)}
+            >
+              <div className="flex items-start justify-between">
+                <div className="flex flex-col">
+                  <h3 className="text-lg font-black text-foreground">{o.customer_name}</h3>
+                  <p className="text-sm font-bold text-blue-600">+258 {o.phone}</p>
+                </div>
+                <StatusBadge status={o.status} />
+              </div>
+
+              <div className="mt-4 grid grid-cols-2 gap-4 border-y border-border/50 py-4">
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-[10px] font-bold uppercase text-muted-foreground tracking-tight">Localização</span>
+                  <span className="text-sm font-bold">{o.province} · {o.city}</span>
+                </div>
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-[10px] font-bold uppercase text-muted-foreground tracking-tight">Encomenda</span>
+                  <span className="text-sm font-bold truncate">{o.product_name} · {o.quantity}un</span>
+                </div>
+                <div className="col-span-2 flex flex-col gap-0.5">
+                  <span className="text-[10px] font-bold uppercase text-muted-foreground tracking-tight">Próxima Ligação / Horário</span>
+                  <div className="flex items-center gap-2">
+                    {isLate && <AlertCircle className="size-4 text-red-600 animate-pulse" />}
+                    <span className={`text-sm font-black ${isLate ? 'text-red-600' : 'text-primary'}`}>
+                      {isLate ? "⚠️ LIGAÇÃO ATRASADA" : (o.callback_at ? formatDateTime(o.callback_at) : (o.contact_slot ?? o.contact_period ?? "A qualquer hora"))}
                     </span>
-                  )}
-                </h3>
-                <p className="mt-0.5 text-sm font-medium text-muted-foreground">+258 {o.phone}</p>
-              </div>
-              <StatusBadge status={o.status} />
-            </div>
-
-            {/* Content Grid */}
-            <div className="mt-4 grid grid-cols-2 gap-3 border-y border-border/50 py-3">
-              <div className="flex items-start gap-2">
-                <MapPin className="mt-0.5 size-3.5 text-muted-foreground" />
-                <div className="text-xs">
-                  <p className="font-semibold text-foreground">{o.province}</p>
-                  <p className="text-muted-foreground">{o.city}</p>
+                  </div>
                 </div>
               </div>
-              <div className="flex items-start gap-2">
-                <ShoppingBag className="mt-0.5 size-3.5 text-muted-foreground" />
-                <div className="text-xs">
-                  <p className="font-semibold text-foreground truncate">{o.product_name}</p>
-                  <p className="text-muted-foreground">{o.quantity} unidade(s)</p>
-                </div>
-              </div>
-              <div className="col-span-2 flex items-center gap-2">
-                <Clock className="size-3.5 text-muted-foreground" />
-                <p className="text-xs font-medium text-foreground">
-                  Melhor horário: <span className="text-primary">{o.contact_slot ?? o.contact_period ?? "A qualquer hora"}</span>
-                </p>
-              </div>
-            </div>
 
-            {/* Actions */}
-            <div className="mt-4 flex gap-2">
-              <Button
-                variant="outline"
-                className="flex-1 gap-2 font-bold"
-                onClick={(e) => e.stopPropagation()}
-                asChild
-              >
-                <a href={telLink(o.phone)}>
-                  <Phone className="size-4" /> LIGAR
-                </a>
-              </Button>
-              <Button
-                variant="outline"
-                className="flex-1 gap-2 font-bold text-green-600 border-green-200 hover:bg-green-50"
-                onClick={(e) => e.stopPropagation()}
-                asChild
-              >
-                <a
-                  href={whatsappLink(
-                    o.phone,
-                    buildWaMessage(waTemplate, o.customer_name, o.product_name)
-                  )}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <MessageCircle className="size-4" /> WhatsApp
-                </a>
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="rounded-full border border-border"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onSelect(o);
-                }}
-              >
-                <MoreHorizontal className="size-4" />
-              </Button>
+              {/* Acções principais solicitadas */}
+              <div className="mt-5 grid grid-cols-2 gap-2">
+                <Button variant="default" className="font-black h-11" asChild onClick={(e) => e.stopPropagation()}>
+                  <a href={telLink(o.phone)}>
+                    <Phone className="size-4 mr-2" /> LIGAR
+                  </a>
+                </Button>
+                <Button variant="outline" className="font-black h-11 border-2" onClick={(e) => { e.stopPropagation(); onSelect(o); }}>
+                  GERIR
+                </Button>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
