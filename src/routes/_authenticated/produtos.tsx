@@ -57,7 +57,10 @@ interface FormState {
   provinces: string[];
   cities: string;
   active: boolean;
+  action_button_text: string;
+  action_button_color: string;
 }
+
 
 const EMPTY_FORM: FormState = {
   name: "",
