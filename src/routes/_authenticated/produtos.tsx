@@ -568,7 +568,8 @@ function ProductsPage() {
                             onChange={async (e) => {
                               const file = e.target.files?.[0];
                               if (!file) return;
-                              const fileName = `testimonial-${Math.random().toString(36).slice(2)}`;
+                              const fileExt = file.name.split(".").pop();
+                              const fileName = `testimonial-${Math.random().toString(36).slice(2)}.${fileExt}`;
                               const { error, data } = await supabase.storage
                                 .from("product-images")
                                 .upload(fileName, file);
