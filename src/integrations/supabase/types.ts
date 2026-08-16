@@ -257,6 +257,36 @@ export type Database = {
         }
         Relationships: []
       }
+      team_invites: {
+        Row: {
+          created_at: string
+          id: string
+          invited_by: string | null
+          invitee_user_id: string
+          responded_at: string | null
+          role: Database["public"]["Enums"]["app_role"]
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          invited_by?: string | null
+          invitee_user_id: string
+          responded_at?: string | null
+          role: Database["public"]["Enums"]["app_role"]
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          invited_by?: string | null
+          invitee_user_id?: string
+          responded_at?: string | null
+          role?: Database["public"]["Enums"]["app_role"]
+          status?: string
+        }
+        Relationships: []
+      }
       team_members: {
         Row: {
           active: boolean
@@ -336,6 +366,10 @@ export type Database = {
         Returns: boolean
       }
       is_staff: { Args: { _user_id: string }; Returns: boolean }
+      respond_team_invite: {
+        Args: { p_accept: boolean; p_invite_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
       app_role: "administrador" | "gestor" | "operador" | "entregador"

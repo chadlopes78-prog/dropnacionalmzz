@@ -8,6 +8,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { InviteInbox } from "@/components/team/InviteInbox";
+
 
 export const Route = createFileRoute("/auth")({
   validateSearch: (
@@ -100,14 +102,18 @@ function AuthPage() {
         </div>
 
         {acesso === "pendente" ? (
-          <div
-            role="alert"
-            className="mb-4 rounded-lg border border-status-warn/40 bg-status-warn/10 p-3 text-sm text-foreground"
-          >
-            A sua conta existe, mas ainda não tem função atribuída na equipa. Peça a um
-            administrador para lhe dar acesso na página <strong>Equipa</strong>.
-          </div>
+          <>
+            <div
+              role="alert"
+              className="mb-4 rounded-lg border border-status-warn/40 bg-status-warn/10 p-3 text-sm text-foreground"
+            >
+              A sua conta existe, mas ainda não tem função atribuída na equipa. Peça um convite ao
+              administrador e aceite-o abaixo.
+            </div>
+            <InviteInbox className="mb-4" />
+          </>
         ) : null}
+
 
         <Card>
           <CardHeader>
