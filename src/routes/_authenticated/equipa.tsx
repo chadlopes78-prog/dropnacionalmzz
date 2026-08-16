@@ -208,24 +208,41 @@ function AccessControlCard() {
   const qc = useQueryClient();
   const { data: myRoles } = useMyRoles();
   const { data: grants, isLoading } = useAllRoles();
+  const { data: invites } = useAllInvites();
   const [userId, setUserId] = useState("");
   const [grantRole, setGrantRole] = useState<AppRole>("operador");
 
   const isAdmin = !!myRoles?.includes("administrador");
 
-  const grant = useMutation({
+  const invite = useMutation({
     mutationFn: async () => {
       const uuid = userId.trim();
       if (!/^[0-9a-f-]{36}$/i.test(uuid)) throw new Error("Identificador de utilizador inválido.");
       const { error } = await supabase
-        .from("user_roles")
-        .insert({ user_id: uuid, role: grantRole });
+        .from("team_invites")
+        .insert({ invitee_user_id: uuid, role: grantRole, invited_by: null });
+      if (error) {
+        throw new Error(
+          error.code === "23505" ? "Já existe um convite pendente para esta função." : error.message,
+        );
+      }
+    },
+    onSuccess: () => {
+      toast.success("Convite enviado. Aguarda aceitação do utilizador.");
+      setUserId("");
+      void qc.invalidateQueries({ queryKey: ["team_invites"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const cancelInvite = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("team_invites").delete().eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => {
-      toast.success("Acesso atribuído.");
-      setUserId("");
-      void qc.invalidateQueries({ queryKey: ["user_roles"] });
+      toast.success("Convite cancelado.");
+      void qc.invalidateQueries({ queryKey: ["team_invites"] });
     },
     onError: (e: Error) => toast.error(e.message),
   });
@@ -244,14 +261,16 @@ function AccessControlCard() {
 
   if (!isAdmin) return null;
 
+  const pendingInvites = (invites ?? []).filter((i) => i.status === "pendente");
+
   return (
     <Card className="mb-5">
       <CardContent className="space-y-4">
         <div>
           <h2 className="font-semibold text-foreground">Acessos à dashboard</h2>
           <p className="text-sm text-muted-foreground">
-            Só contas com função atribuída conseguem ver encomendas e clientes. Criar conta não dá
-            acesso.
+            Convide um utilizador pelo identificador da conta dele. O acesso só fica activo depois
+            de o próprio aceitar o convite.
           </p>
         </div>
 
@@ -279,10 +298,39 @@ function AccessControlCard() {
               </SelectContent>
             </Select>
           </div>
-          <Button onClick={() => grant.mutate()} disabled={grant.isPending}>
-            <Plus className="size-4" /> Dar acesso
+          <Button onClick={() => invite.mutate()} disabled={invite.isPending}>
+            <Send className="size-4" /> Convidar
           </Button>
         </div>
+
+        {pendingInvites.length > 0 ? (
+          <div className="space-y-2">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+              Convites pendentes
+            </h3>
+            {pendingInvites.map((i) => (
+              <div
+                key={i.id}
+                className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-status-warn/40 bg-status-warn/5 p-3"
+              >
+                <div className="min-w-0">
+                  <p className="truncate font-mono text-xs text-foreground">{i.invitee_user_id}</p>
+                  <Badge variant="secondary" className="mt-1">
+                    {TEAM_ROLES.find((r) => r.value === i.role)?.label ?? i.role}
+                  </Badge>
+                </div>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  className="text-status-danger"
+                  onClick={() => cancelInvite.mutate(i.id)}
+                >
+                  <Trash2 className="size-4" /> Cancelar convite
+                </Button>
+              </div>
+            ))}
+          </div>
+        ) : null}
 
         {isLoading ? (
           <Skeleton className="h-16 w-full rounded-lg" />
@@ -315,3 +363,4 @@ function AccessControlCard() {
     </Card>
   );
 }
+
