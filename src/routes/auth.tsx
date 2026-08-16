@@ -70,13 +70,24 @@ function AuthPage() {
       password,
       options: { emailRedirectTo: `${window.location.origin}/dashboard` },
     });
-    setLoading(false);
     if (error) {
+      setLoading(false);
       toast.error(error.message);
       return;
     }
-    toast.success("Conta criada. Já pode entrar.");
+    // Confirmação de e-mail está desactivada: entra directamente após criar conta.
+    const { error: signInError } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+    setLoading(false);
+    if (signInError) {
+      toast.success("Conta criada. Já pode entrar.");
+      return;
+    }
+    void navigate({ to: "/dashboard" });
   }
+
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-muted/40 px-4 py-10">
