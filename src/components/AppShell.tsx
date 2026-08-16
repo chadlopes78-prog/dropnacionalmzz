@@ -17,11 +17,13 @@ import {
   BarChart3,
   Settings,
   Phone,
+  ShieldCheck,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
+import { useMyRoles } from "@/hooks/useRoles";
 
 const NAVIGATION_GROUPS = [
   {
@@ -49,10 +51,20 @@ const NAVIGATION_GROUPS = [
   },
 ] as const;
 
+/** Separadores visíveis apenas para administradores. */
+const ADMIN_GROUP = {
+  title: "ADMINISTRAÇÃO",
+  items: [{ to: "/painel", label: "Painel de Controlo", icon: ShieldCheck }],
+} as const;
+
 function NavList({ onNavigate }: { onNavigate?: () => void }) {
+  const { data: roles } = useMyRoles();
+  const isAdmin = !!roles?.includes("administrador");
+  const groups = isAdmin ? [ADMIN_GROUP, ...NAVIGATION_GROUPS] : NAVIGATION_GROUPS;
+
   return (
     <nav className="flex flex-col gap-5 p-3">
-      {NAVIGATION_GROUPS.map((group) => (
+      {groups.map((group) => (
         <div key={group.title} className="space-y-1">
           <h4 className="px-3 text-[10px] font-bold tracking-wider text-sidebar-foreground/40 uppercase">
             {group.title}

@@ -18,6 +18,7 @@ import { Route as AuthenticatedDashboardRouteImport } from './routes/_authentica
 import { Route as AuthenticatedEmEntregaRouteImport } from './routes/_authenticated/em-entrega'
 import { Route as AuthenticatedEntreguesRouteImport } from './routes/_authenticated/entregues'
 import { Route as AuthenticatedEquipaRouteImport } from './routes/_authenticated/equipa'
+import { Route as AuthenticatedPainelRouteImport } from './routes/_authenticated/painel'
 import { Route as AuthenticatedPorLigarRouteImport } from './routes/_authenticated/por-ligar'
 import { Route as AuthenticatedProdutosRouteImport } from './routes/_authenticated/produtos'
 import { Route as CheckoutSlugRouteImport } from './routes/checkout.$slug'
@@ -68,6 +69,11 @@ const AuthenticatedEquipaRoute = AuthenticatedEquipaRouteImport.update({
   path: '/equipa',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedPainelRoute = AuthenticatedPainelRouteImport.update({
+  id: '/painel',
+  path: '/painel',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedPorLigarRoute = AuthenticatedPorLigarRouteImport.update({
   id: '/por-ligar',
   path: '/por-ligar',
@@ -98,6 +104,7 @@ export interface FileRoutesByFullPath {
   '/em-entrega': typeof AuthenticatedEmEntregaRoute
   '/entregues': typeof AuthenticatedEntreguesRoute
   '/equipa': typeof AuthenticatedEquipaRoute
+  '/painel': typeof AuthenticatedPainelRoute
   '/por-ligar': typeof AuthenticatedPorLigarRoute
   '/produtos': typeof AuthenticatedProdutosRoute
   '/checkout/$slug': typeof CheckoutSlugRoute
@@ -112,6 +119,7 @@ export interface FileRoutesByTo {
   '/em-entrega': typeof AuthenticatedEmEntregaRoute
   '/entregues': typeof AuthenticatedEntreguesRoute
   '/equipa': typeof AuthenticatedEquipaRoute
+  '/painel': typeof AuthenticatedPainelRoute
   '/por-ligar': typeof AuthenticatedPorLigarRoute
   '/produtos': typeof AuthenticatedProdutosRoute
   '/checkout/$slug': typeof CheckoutSlugRoute
@@ -128,6 +136,7 @@ export interface FileRoutesById {
   '/_authenticated/em-entrega': typeof AuthenticatedEmEntregaRoute
   '/_authenticated/entregues': typeof AuthenticatedEntreguesRoute
   '/_authenticated/equipa': typeof AuthenticatedEquipaRoute
+  '/_authenticated/painel': typeof AuthenticatedPainelRoute
   '/_authenticated/por-ligar': typeof AuthenticatedPorLigarRoute
   '/_authenticated/produtos': typeof AuthenticatedProdutosRoute
   '/checkout/$slug': typeof CheckoutSlugRoute
@@ -144,6 +153,7 @@ export interface FileRouteTypes {
     | '/em-entrega'
     | '/entregues'
     | '/equipa'
+    | '/painel'
     | '/por-ligar'
     | '/produtos'
     | '/checkout/$slug'
@@ -158,6 +168,7 @@ export interface FileRouteTypes {
     | '/em-entrega'
     | '/entregues'
     | '/equipa'
+    | '/painel'
     | '/por-ligar'
     | '/produtos'
     | '/checkout/$slug'
@@ -173,6 +184,7 @@ export interface FileRouteTypes {
     | '/_authenticated/em-entrega'
     | '/_authenticated/entregues'
     | '/_authenticated/equipa'
+    | '/_authenticated/painel'
     | '/_authenticated/por-ligar'
     | '/_authenticated/produtos'
     | '/checkout/$slug'
@@ -252,6 +264,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedEquipaRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/painel': {
+      id: '/_authenticated/painel'
+      path: '/painel'
+      fullPath: '/painel'
+      preLoaderRoute: typeof AuthenticatedPainelRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/por-ligar': {
       id: '/_authenticated/por-ligar'
       path: '/por-ligar'
@@ -290,6 +309,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedEmEntregaRoute: typeof AuthenticatedEmEntregaRoute
   AuthenticatedEntreguesRoute: typeof AuthenticatedEntreguesRoute
   AuthenticatedEquipaRoute: typeof AuthenticatedEquipaRoute
+  AuthenticatedPainelRoute: typeof AuthenticatedPainelRoute
   AuthenticatedPorLigarRoute: typeof AuthenticatedPorLigarRoute
   AuthenticatedProdutosRoute: typeof AuthenticatedProdutosRoute
 }
@@ -301,6 +321,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedEmEntregaRoute: AuthenticatedEmEntregaRoute,
   AuthenticatedEntreguesRoute: AuthenticatedEntreguesRoute,
   AuthenticatedEquipaRoute: AuthenticatedEquipaRoute,
+  AuthenticatedPainelRoute: AuthenticatedPainelRoute,
   AuthenticatedPorLigarRoute: AuthenticatedPorLigarRoute,
   AuthenticatedProdutosRoute: AuthenticatedProdutosRoute,
 }
