@@ -100,14 +100,18 @@ function AuthPage() {
         </div>
 
         {acesso === "pendente" ? (
-          <div
-            role="alert"
-            className="mb-4 rounded-lg border border-status-warn/40 bg-status-warn/10 p-3 text-sm text-foreground"
-          >
-            A sua conta existe, mas ainda não tem função atribuída na equipa. Peça a um
-            administrador para lhe dar acesso na página <strong>Equipa</strong>.
-          </div>
+          <>
+            <div
+              role="alert"
+              className="mb-4 rounded-lg border border-status-warn/40 bg-status-warn/10 p-3 text-sm text-foreground"
+            >
+              A sua conta existe, mas ainda não tem função atribuída na equipa. Peça um convite ao
+              administrador e aceite-o abaixo.
+            </div>
+            <InviteInbox className="mb-4" />
+          </>
         ) : null}
+
 
         <Card>
           <CardHeader>
