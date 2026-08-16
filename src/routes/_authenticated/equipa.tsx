@@ -22,6 +22,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useOrders, useTeam } from "@/hooks/useOrders";
 import { useAllRoles, useMyRoles, type AppRole } from "@/hooks/useRoles";
 import { useAllInvites } from "@/hooks/useInvites";
+import { InviteInbox } from "@/components/team/InviteInbox";
+
 
 import { TEAM_ROLES, formatMT } from "@/lib/domain";
 
