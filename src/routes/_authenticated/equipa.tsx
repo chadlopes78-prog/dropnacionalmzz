@@ -111,7 +111,10 @@ function TeamPage() {
 
   return (
     <AppShell title="Equipa" description={`${members.length} membros registados`}>
+      <InviteInbox className="mb-5" />
       <AccessControlCard />
+
+
 
       <Card className="mb-5">
         <CardContent className="flex flex-col gap-3 sm:flex-row sm:items-end">
