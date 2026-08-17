@@ -101,10 +101,11 @@ function StoreHome() {
               { label: "Cidades Cobertas", value: "Todas", icon: Globe },
               { label: "Taxa de Sucesso", value: "94%", icon: TrendingUp },
             ].map((stat, i) => (
-              <div key={i} className="flex flex-col items-center text-center">
-                <div className="mb-3 flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+              <div key={i} className="flex flex-col items-center rounded-2xl border border-border/40 bg-background/40 p-5 text-center backdrop-blur-md transition-all duration-300 hover:border-primary/30 hover:shadow-elegant">
+                <div className="mb-3 flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary shadow-glow">
                   <stat.icon className="size-5" />
                 </div>
+
                 <div className="text-2xl font-black text-foreground">{stat.value}</div>
                 <div className="text-xs font-medium uppercase tracking-wider text-muted-foreground">{stat.label}</div>
               </div>
