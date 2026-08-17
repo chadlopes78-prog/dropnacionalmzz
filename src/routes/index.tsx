@@ -2,6 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ShieldCheck, Truck, PhoneCall, Package, CheckCircle2, TrendingUp, Users, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { FloatingBubbles } from "@/components/FloatingBubbles";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -56,6 +58,8 @@ function StoreHome() {
         <div className="pointer-events-none absolute inset-0 -z-10 bg-aurora" />
         <div className="pointer-events-none absolute inset-0 -z-10 bg-grid-subtle opacity-70" />
         <div className="pointer-events-none absolute left-1/2 top-[-10rem] -z-10 size-[42rem] -translate-x-1/2 rounded-full bg-primary/20 blur-[160px]" />
+        <FloatingBubbles count={16} className="-z-10" />
+
 
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
@@ -162,6 +166,8 @@ function StoreHome() {
       {/* Benefits Section */}
       <section id="beneficios" className="relative bg-card/50 py-24 lg:py-32 backdrop-blur-sm overflow-hidden">
         <div className="absolute top-0 right-0 -z-10 size-[500px] rounded-full bg-primary/5 blur-[120px]" />
+        <FloatingBubbles count={10} className="-z-10 opacity-70" />
+
         
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-16 lg:grid-cols-2 lg:items-center">
