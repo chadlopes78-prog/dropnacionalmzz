@@ -145,11 +145,12 @@ function StoreHome() {
                 icon: Truck
               }
             ].map((item, i) => (
-              <div key={i} className="relative group">
-                <div className="mb-8 flex size-20 items-center justify-center rounded-3xl bg-primary/10 text-primary transition-all duration-300 group-hover:bg-primary group-hover:text-primary-foreground">
+              <div key={i} className="group relative rounded-3xl border border-border/40 bg-card/40 p-8 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-elegant">
+                <div className="relative mb-8 flex size-20 items-center justify-center rounded-3xl bg-primary/10 text-primary transition-all duration-300 group-hover:bg-primary group-hover:text-primary-foreground group-hover:shadow-glow">
                   <item.icon className="size-10" />
                   <span className="absolute -top-4 -right-4 text-4xl font-black text-foreground/5">{item.step}</span>
                 </div>
+
                 <h3 className="text-2xl font-bold text-foreground">{item.title}</h3>
                 <p className="mt-4 text-lg leading-relaxed text-muted-foreground">{item.desc}</p>
               </div>
