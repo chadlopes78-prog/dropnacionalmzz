@@ -53,21 +53,24 @@ function StoreHome() {
 
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-background pt-20 pb-24 lg:pt-32 lg:pb-40">
-        <div className="absolute inset-0 -z-10 bg-[radial-gradient(45%_45%_at_50%_50%,var(--color-primary)_0%,transparent_100%)] opacity-[0.05]" />
-        
+        <div className="pointer-events-none absolute inset-0 -z-10 bg-aurora" />
+        <div className="pointer-events-none absolute inset-0 -z-10 bg-grid-subtle opacity-70" />
+        <div className="pointer-events-none absolute left-1/2 top-[-10rem] -z-10 size-[42rem] -translate-x-1/2 rounded-full bg-primary/20 blur-[160px]" />
+
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm font-semibold text-primary animate-in fade-in slide-in-from-bottom-2 duration-500">
+            <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm font-semibold text-primary shadow-glow animate-in fade-in slide-in-from-bottom-2 duration-500">
               <span className="relative flex h-2 w-2">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span>
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-primary"></span>
               </span>
               Líder em E-commerce Nacional
             </div>
-            
+
             <h1 className="mx-auto mt-8 max-w-4xl bg-gradient-to-b from-foreground to-foreground/70 bg-clip-text text-5xl font-extrabold tracking-tight text-transparent sm:text-7xl lg:text-8xl animate-in fade-in slide-in-from-bottom-4 duration-700 delay-100 leading-[1.1]">
-              Venda em Moçambique com <span className="text-primary">Risco Zero</span>
+              Venda em Moçambique com <span className="text-gradient-primary">Risco Zero</span>
             </h1>
+
             
             <p className="mx-auto mt-8 max-w-2xl text-xl text-muted-foreground animate-in fade-in slide-in-from-bottom-5 duration-700 delay-200">
               A infraestrutura completa para o seu negócio de Drop Nacional. Nós tratamos da importação, confirmação e entrega. Você só precisa de vender.
