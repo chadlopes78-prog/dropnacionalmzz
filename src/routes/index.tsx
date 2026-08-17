@@ -53,21 +53,24 @@ function StoreHome() {
 
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-background pt-20 pb-24 lg:pt-32 lg:pb-40">
-        <div className="absolute inset-0 -z-10 bg-[radial-gradient(45%_45%_at_50%_50%,var(--color-primary)_0%,transparent_100%)] opacity-[0.05]" />
-        
+        <div className="pointer-events-none absolute inset-0 -z-10 bg-aurora" />
+        <div className="pointer-events-none absolute inset-0 -z-10 bg-grid-subtle opacity-70" />
+        <div className="pointer-events-none absolute left-1/2 top-[-10rem] -z-10 size-[42rem] -translate-x-1/2 rounded-full bg-primary/20 blur-[160px]" />
+
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm font-semibold text-primary animate-in fade-in slide-in-from-bottom-2 duration-500">
+            <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm font-semibold text-primary shadow-glow animate-in fade-in slide-in-from-bottom-2 duration-500">
               <span className="relative flex h-2 w-2">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span>
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-primary"></span>
               </span>
               Líder em E-commerce Nacional
             </div>
-            
+
             <h1 className="mx-auto mt-8 max-w-4xl bg-gradient-to-b from-foreground to-foreground/70 bg-clip-text text-5xl font-extrabold tracking-tight text-transparent sm:text-7xl lg:text-8xl animate-in fade-in slide-in-from-bottom-4 duration-700 delay-100 leading-[1.1]">
-              Venda em Moçambique com <span className="text-primary">Risco Zero</span>
+              Venda em Moçambique com <span className="text-gradient-primary">Risco Zero</span>
             </h1>
+
             
             <p className="mx-auto mt-8 max-w-2xl text-xl text-muted-foreground animate-in fade-in slide-in-from-bottom-5 duration-700 delay-200">
               A infraestrutura completa para o seu negócio de Drop Nacional. Nós tratamos da importação, confirmação e entrega. Você só precisa de vender.
@@ -75,11 +78,12 @@ function StoreHome() {
 
             <div className="mt-12 flex flex-col sm:flex-row justify-center gap-4 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-300">
               <Link to="/auth">
-                <Button size="lg" className="h-14 w-full sm:w-auto rounded-full px-10 text-lg font-bold shadow-xl shadow-primary/20 transition-transform hover:scale-105 active:scale-95">
+                <Button size="lg" className="h-14 w-full sm:w-auto rounded-full px-10 text-lg font-bold shadow-elegant transition-transform hover:scale-105 active:scale-95">
                   Começar a Vender Agora
                 </Button>
               </Link>
-              <Button size="lg" variant="outline" className="h-14 w-full sm:w-auto rounded-full px-10 text-lg font-bold border-2 transition-all hover:bg-secondary/50" onClick={() => document.getElementById('como-funciona')?.scrollIntoView({ behavior: 'smooth' })}>
+              <Button size="lg" variant="outline" className="h-14 w-full sm:w-auto rounded-full px-10 text-lg font-bold border-2 border-primary/20 bg-background/60 backdrop-blur-md transition-all hover:bg-primary/5" onClick={() => document.getElementById('como-funciona')?.scrollIntoView({ behavior: 'smooth' })}>
+
                 Ver Como Funciona
               </Button>
             </div>
@@ -97,10 +101,11 @@ function StoreHome() {
               { label: "Cidades Cobertas", value: "Todas", icon: Globe },
               { label: "Taxa de Sucesso", value: "94%", icon: TrendingUp },
             ].map((stat, i) => (
-              <div key={i} className="flex flex-col items-center text-center">
-                <div className="mb-3 flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+              <div key={i} className="flex flex-col items-center rounded-2xl border border-border/40 bg-background/40 p-5 text-center backdrop-blur-md transition-all duration-300 hover:border-primary/30 hover:shadow-elegant">
+                <div className="mb-3 flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary shadow-glow">
                   <stat.icon className="size-5" />
                 </div>
+
                 <div className="text-2xl font-black text-foreground">{stat.value}</div>
                 <div className="text-xs font-medium uppercase tracking-wider text-muted-foreground">{stat.label}</div>
               </div>
@@ -140,11 +145,12 @@ function StoreHome() {
                 icon: Truck
               }
             ].map((item, i) => (
-              <div key={i} className="relative group">
-                <div className="mb-8 flex size-20 items-center justify-center rounded-3xl bg-primary/10 text-primary transition-all duration-300 group-hover:bg-primary group-hover:text-primary-foreground">
+              <div key={i} className="group relative rounded-3xl border border-border/40 bg-card/40 p-8 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-elegant">
+                <div className="relative mb-8 flex size-20 items-center justify-center rounded-3xl bg-primary/10 text-primary transition-all duration-300 group-hover:bg-primary group-hover:text-primary-foreground group-hover:shadow-glow">
                   <item.icon className="size-10" />
                   <span className="absolute -top-4 -right-4 text-4xl font-black text-foreground/5">{item.step}</span>
                 </div>
+
                 <h3 className="text-2xl font-bold text-foreground">{item.title}</h3>
                 <p className="mt-4 text-lg leading-relaxed text-muted-foreground">{item.desc}</p>
               </div>
@@ -189,7 +195,7 @@ function StoreHome() {
               </div>
             </div>
             
-            <div className="relative rounded-3xl border border-border/50 bg-background/50 p-8 shadow-2xl backdrop-blur-md">
+            <div className="relative rounded-3xl border border-primary/15 bg-background/60 p-8 shadow-elegant backdrop-blur-xl">
               <div className="space-y-6">
                 <div className="flex items-center gap-4 rounded-2xl bg-primary/5 p-4 border border-primary/10">
                   <div className="size-12 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">12k</div>

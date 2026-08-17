@@ -34,6 +34,8 @@
   --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-primary-glow: var(--primary-glow);
+
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
@@ -106,7 +108,16 @@
   --sidebar-accent-foreground: oklch(0.97 0.01 160);
   --sidebar-border: oklch(0.33 0.03 163);
   --sidebar-ring: oklch(0.62 0.13 163);
+
+  /* Premium visual layer */
+  --primary-glow: oklch(0.72 0.15 168);
+  --gradient-primary: linear-gradient(135deg, var(--primary), var(--primary-glow));
+  --gradient-aurora: radial-gradient(60% 60% at 20% 10%, color-mix(in oklab, var(--primary) 22%, transparent) 0%, transparent 70%),
+    radial-gradient(50% 50% at 85% 0%, color-mix(in oklab, var(--primary-glow) 20%, transparent) 0%, transparent 70%);
+  --shadow-elegant: 0 24px 60px -24px color-mix(in oklab, var(--primary) 40%, transparent);
+  --shadow-glow: 0 0 48px color-mix(in oklab, var(--primary-glow) 32%, transparent);
 }
+
 
 
 .dark {
@@ -122,8 +133,9 @@
   --card-foreground: oklch(0.984 0.003 247.858);
   --popover: oklch(0.208 0.042 265.755);
   --popover-foreground: oklch(0.984 0.003 247.858);
-  --primary: oklch(0.929 0.013 255.508);
-  --primary-foreground: oklch(0.208 0.042 265.755);
+  --primary: oklch(0.72 0.13 168);
+  --primary-foreground: oklch(0.16 0.03 170);
+
   --secondary: oklch(0.279 0.041 260.031);
   --secondary-foreground: oklch(0.984 0.003 247.858);
   --muted: oklch(0.279 0.041 260.031);
@@ -148,7 +160,38 @@
   --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.551 0.027 264.364);
+
+  --primary-glow: oklch(0.82 0.13 172);
+  --shadow-elegant: 0 24px 60px -24px color-mix(in oklab, var(--primary) 45%, transparent);
+  --shadow-glow: 0 0 56px color-mix(in oklab, var(--primary-glow) 28%, transparent);
 }
+
+@utility bg-aurora {
+  background-image: var(--gradient-aurora);
+}
+
+@utility bg-grid-subtle {
+  background-image:
+    linear-gradient(to right, color-mix(in oklab, var(--foreground) 6%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, var(--foreground) 6%, transparent) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(70% 60% at 50% 0%, black 0%, transparent 100%);
+}
+
+@utility shadow-elegant {
+  box-shadow: var(--shadow-elegant);
+}
+
+@utility shadow-glow {
+  box-shadow: var(--shadow-glow);
+}
+
+@utility text-gradient-primary {
+  background-image: var(--gradient-primary);
+  background-clip: text;
+  color: transparent;
+}
+
 
 @layer base {
   * {
