@@ -78,11 +78,12 @@ function StoreHome() {
 
             <div className="mt-12 flex flex-col sm:flex-row justify-center gap-4 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-300">
               <Link to="/auth">
-                <Button size="lg" className="h-14 w-full sm:w-auto rounded-full px-10 text-lg font-bold shadow-xl shadow-primary/20 transition-transform hover:scale-105 active:scale-95">
+                <Button size="lg" className="h-14 w-full sm:w-auto rounded-full px-10 text-lg font-bold shadow-elegant transition-transform hover:scale-105 active:scale-95">
                   Começar a Vender Agora
                 </Button>
               </Link>
-              <Button size="lg" variant="outline" className="h-14 w-full sm:w-auto rounded-full px-10 text-lg font-bold border-2 transition-all hover:bg-secondary/50" onClick={() => document.getElementById('como-funciona')?.scrollIntoView({ behavior: 'smooth' })}>
+              <Button size="lg" variant="outline" className="h-14 w-full sm:w-auto rounded-full px-10 text-lg font-bold border-2 border-primary/20 bg-background/60 backdrop-blur-md transition-all hover:bg-primary/5" onClick={() => document.getElementById('como-funciona')?.scrollIntoView({ behavior: 'smooth' })}>
+
                 Ver Como Funciona
               </Button>
             </div>
