@@ -56,6 +56,8 @@ function StoreHome() {
         <div className="pointer-events-none absolute inset-0 -z-10 bg-aurora" />
         <div className="pointer-events-none absolute inset-0 -z-10 bg-grid-subtle opacity-70" />
         <div className="pointer-events-none absolute left-1/2 top-[-10rem] -z-10 size-[42rem] -translate-x-1/2 rounded-full bg-primary/20 blur-[160px]" />
+        <FloatingBubbles count={16} className="-z-10" />
+
 
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
