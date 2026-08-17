@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ShieldCheck, Truck, PhoneCall, Package, CheckCircle2, TrendingUp, Users, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { FloatingBubbles } from "@/components/FloatingBubbles";
+import { cn } from "@/lib/utils";
 
 
 export const Route = createFileRoute("/")({
