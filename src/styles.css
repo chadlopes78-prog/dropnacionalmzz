@@ -106,7 +106,16 @@
   --sidebar-accent-foreground: oklch(0.97 0.01 160);
   --sidebar-border: oklch(0.33 0.03 163);
   --sidebar-ring: oklch(0.62 0.13 163);
+
+  /* Premium visual layer */
+  --primary-glow: oklch(0.72 0.15 168);
+  --gradient-primary: linear-gradient(135deg, var(--primary), var(--primary-glow));
+  --gradient-aurora: radial-gradient(60% 60% at 20% 10%, color-mix(in oklab, var(--primary) 22%, transparent) 0%, transparent 70%),
+    radial-gradient(50% 50% at 85% 0%, color-mix(in oklab, var(--primary-glow) 20%, transparent) 0%, transparent 70%);
+  --shadow-elegant: 0 24px 60px -24px color-mix(in oklab, var(--primary) 40%, transparent);
+  --shadow-glow: 0 0 48px color-mix(in oklab, var(--primary-glow) 32%, transparent);
 }
+
 
 
 .dark {
