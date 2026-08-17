@@ -195,7 +195,7 @@ function StoreHome() {
               </div>
             </div>
             
-            <div className="relative rounded-3xl border border-border/50 bg-background/50 p-8 shadow-2xl backdrop-blur-md">
+            <div className="relative rounded-3xl border border-primary/15 bg-background/60 p-8 shadow-elegant backdrop-blur-xl">
               <div className="space-y-6">
                 <div className="flex items-center gap-4 rounded-2xl bg-primary/5 p-4 border border-primary/10">
                   <div className="size-12 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">12k</div>
