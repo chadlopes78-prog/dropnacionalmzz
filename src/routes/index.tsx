@@ -166,6 +166,8 @@ function StoreHome() {
       {/* Benefits Section */}
       <section id="beneficios" className="relative bg-card/50 py-24 lg:py-32 backdrop-blur-sm overflow-hidden">
         <div className="absolute top-0 right-0 -z-10 size-[500px] rounded-full bg-primary/5 blur-[120px]" />
+        <FloatingBubbles count={10} className="-z-10 opacity-70" />
+
         
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-16 lg:grid-cols-2 lg:items-center">
